@@ -1,0 +1,1486 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>小程序 Vibe Coding 上线核心路径</title>
+  <style>
+    :root {
+      --paper: #f7f3eb;
+      --paper-2: #fffaf1;
+      --ink: #11110f;
+      --muted: #68625a;
+      --line: rgba(17, 17, 15, .16);
+      --line-strong: rgba(17, 17, 15, .42);
+      --blue: #174ee8;
+      --red: #d84a2b;
+      --sand: #e8dccb;
+      --shadow: 0 24px 80px rgba(32, 28, 21, .12);
+      --sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      --serif: Georgia, "Times New Roman", "Songti SC", serif;
+      --mono: "SF Mono", Menlo, Monaco, Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      color: var(--ink);
+      font-family: var(--sans);
+      background:
+        radial-gradient(circle at 15% 10%, rgba(216, 74, 43, .08), transparent 28rem),
+        radial-gradient(circle at 88% 86%, rgba(23, 78, 232, .08), transparent 30rem),
+        #e9e2d6;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .deck {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+    }
+
+    section {
+      position: absolute;
+      inset: 0;
+      display: none;
+      padding: 48px;
+      overflow: hidden;
+    }
+
+    section.active {
+      display: grid;
+    }
+
+    .slide {
+      width: min(1240px, 100%);
+      height: min(720px, 100%);
+      margin: auto;
+      position: relative;
+      overflow: hidden;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+
+    .slide::before {
+      content: "";
+      position: absolute;
+      inset: 28px;
+      pointer-events: none;
+      border: 1px solid rgba(17, 17, 15, .08);
+    }
+
+    .inner {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 28px;
+      padding: 42px 54px 36px;
+    }
+
+    .meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+
+    .meta strong {
+      color: var(--ink);
+    }
+
+    h1, h2, h3, p {
+      margin: 0;
+    }
+
+    h1 {
+      max-width: 910px;
+      font-size: clamp(56px, 6.8vw, 88px);
+      line-height: 1.02;
+      letter-spacing: -.045em;
+      font-weight: 850;
+    }
+
+    h2 {
+      max-width: 940px;
+      font-size: clamp(42px, 5.2vw, 68px);
+      line-height: 1.04;
+      letter-spacing: -.045em;
+      font-weight: 850;
+    }
+
+    .cover-title {
+      max-width: 1080px;
+      font-size: clamp(46px, 5.35vw, 70px);
+      line-height: 1.08;
+      letter-spacing: -.035em;
+    }
+
+    .cover-title .nowrap {
+      white-space: nowrap;
+    }
+
+    .nowrap {
+      white-space: nowrap;
+    }
+
+    .cover-title .accent {
+      color: var(--red);
+    }
+
+    h3 {
+      font-size: 27px;
+      line-height: 1.05;
+      letter-spacing: -.045em;
+    }
+
+    .kicker {
+      width: fit-content;
+      margin-bottom: 16px;
+      padding: 8px 0;
+      color: var(--blue);
+      border-bottom: 2px solid var(--blue);
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .lead {
+      max-width: 720px;
+      color: var(--muted);
+      font-size: 22px;
+      line-height: 1.58;
+    }
+
+    .cover {
+      display: grid;
+      grid-template-rows: 1fr auto;
+      gap: 34px;
+      align-items: stretch;
+      height: 100%;
+    }
+
+    .cover-main {
+      align-self: center;
+    }
+
+    .author {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-self: end;
+    }
+
+    .avatar {
+      width: 49px;
+      height: 49px;
+      border-radius: 999px;
+      object-fit: cover;
+      border: 2px solid var(--ink);
+      background: var(--sand);
+    }
+
+    .author span {
+      display: block;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .author strong {
+      display: block;
+      margin-top: 2px;
+      font-size: 20px;
+      line-height: .95;
+      letter-spacing: -.02em;
+    }
+
+    .rule {
+      height: 1px;
+      background: var(--line-strong);
+      margin: 26px 0;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: .92fr 1.08fr;
+      gap: 44px;
+      align-items: center;
+      min-height: 0;
+    }
+
+    .checklist-layout {
+      grid-template-columns: .78fr 1.22fr;
+      gap: 34px;
+    }
+
+    .checklist-layout h2 {
+      max-width: 520px;
+    }
+
+    .checklist-layout .card {
+      padding: 28px;
+    }
+
+    .checklist-layout .list li {
+      grid-template-columns: 34px 1fr;
+      font-size: 16px;
+      line-height: 1.38;
+      white-space: nowrap;
+    }
+
+    .focus-title {
+      font-size: clamp(40px, 4.8vw, 62px);
+    }
+
+    .flow-title {
+      white-space: nowrap;
+      font-size: clamp(38px, 4.6vw, 60px);
+    }
+
+    .end-title {
+      white-space: nowrap;
+      font-size: clamp(38px, 4.55vw, 60px);
+    }
+
+    .card {
+      min-height: 0;
+      padding: 24px;
+      border: 1px solid var(--line);
+      background: rgba(255, 250, 241, .66);
+    }
+
+    .card.dark {
+      background: var(--red);
+      color: var(--paper);
+      border-color: var(--red);
+    }
+
+    .card.red {
+      background: rgba(216, 74, 43, .08);
+      border-color: rgba(216, 74, 43, .34);
+    }
+
+    .card.neutral {
+      background: rgba(255, 250, 241, .62);
+      border-color: var(--line);
+    }
+
+    .label {
+      margin-bottom: 26px;
+      color: var(--blue);
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .dark .label {
+      color: rgba(255, 250, 241, .86);
+    }
+
+    .card p {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.58;
+    }
+
+    .dark p {
+      color: rgba(247, 243, 235, .7);
+    }
+
+    .role-badge {
+      display: inline-flex;
+      width: fit-content;
+      margin-top: 22px;
+      padding: 8px 10px;
+      border: 1px solid rgba(255, 250, 241, .56);
+      color: var(--paper);
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 13px;
+    }
+
+    .list li {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.45;
+    }
+
+    .list b {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 28px;
+      color: var(--ink);
+      border: 1px solid var(--line-strong);
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .dark .list li {
+      color: rgba(247, 243, 235, .72);
+    }
+
+    .dark .list b {
+      color: var(--paper);
+      border-color: rgba(247, 243, 235, .34);
+    }
+
+    .storage-list {
+      margin-top: 20px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .storage-item {
+      padding: 16px;
+      border: 1px solid var(--line);
+      background: rgba(232, 220, 203, .42);
+    }
+
+    .storage-item h4 {
+      margin: 0 0 8px;
+      font-size: 19px;
+      letter-spacing: -.03em;
+    }
+
+    .storage-item p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.48;
+    }
+
+    .storage-note {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.46;
+    }
+
+    .storage-note strong {
+      color: var(--red);
+    }
+
+    .quote {
+      padding-left: 28px;
+      border-left: 4px solid var(--red);
+      font-family: var(--serif);
+      font-size: 34px;
+      line-height: 1.28;
+      letter-spacing: -.045em;
+    }
+
+    .account-stack {
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+      gap: 24px;
+      align-self: stretch;
+    }
+
+    .account-title {
+      white-space: nowrap;
+      font-size: clamp(38px, 4.6vw, 62px);
+    }
+
+    .account-alert {
+      padding: 26px 30px;
+      border-left: 5px solid var(--red);
+      background: rgba(216, 74, 43, .08);
+      font-size: 25px;
+      line-height: 1.34;
+      letter-spacing: -.045em;
+      font-weight: 850;
+      white-space: nowrap;
+    }
+
+    .account-points {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .account-point {
+      padding: 22px;
+      border: 1px solid var(--line);
+      background: rgba(255, 250, 241, .68);
+      position: relative;
+      overflow: hidden;
+      min-height: 250px;
+    }
+
+    .account-point strong {
+      display: block;
+      margin-bottom: 10px;
+      color: var(--ink);
+      font-size: 21px;
+      letter-spacing: -.03em;
+    }
+
+    .account-point span {
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.5;
+      position: relative;
+      z-index: 1;
+    }
+
+    .account-mark {
+      position: absolute;
+      left: 20px;
+      right: 20px;
+      bottom: 18px;
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      color: rgba(216, 74, 43, .18);
+      font-family: var(--mono);
+      font-weight: 900;
+      pointer-events: none;
+    }
+
+    .account-mark b {
+      font-size: 72px;
+      line-height: .78;
+      letter-spacing: -.08em;
+    }
+
+    .account-mark em {
+      font-style: normal;
+      font-size: 13px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .table {
+      display: grid;
+      border: 1px solid var(--line);
+      background: rgba(255, 250, 241, .62);
+      align-self: stretch;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: .72fr repeat(3, 1fr);
+      border-bottom: 1px solid var(--line);
+      min-height: 0;
+    }
+
+    .row:last-child {
+      border-bottom: none;
+    }
+
+    .cell {
+      padding: 12px 13px;
+      border-right: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.36;
+    }
+
+    .cell:last-child {
+      border-right: none;
+    }
+
+    .head .cell {
+      color: var(--ink);
+      background: var(--sand);
+      font-weight: 850;
+      word-break: keep-all;
+    }
+
+    .cell strong {
+      color: var(--ink);
+    }
+
+    .cell strong.orange {
+      color: var(--red);
+    }
+
+    .dense-table {
+      align-self: stretch;
+    }
+
+    .dense-table .row {
+      grid-template-columns: .60fr 1.14fr 1.12fr 1.04fr;
+    }
+
+    .dense-table .cell {
+      padding: 10px 10px;
+      font-size: 12px;
+      line-height: 1.34;
+    }
+
+    .dense-table .head .cell {
+      font-size: 13px;
+      line-height: 1.26;
+    }
+
+    .compact-slide {
+      gap: 12px;
+      padding-top: 34px;
+      padding-bottom: 28px;
+    }
+
+    .compact-slide h2 {
+      font-size: clamp(34px, 4vw, 52px);
+      line-height: 1;
+    }
+
+    .compact-slide .kicker {
+      margin-bottom: 10px;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      align-self: center;
+    }
+
+    .step {
+      min-height: 132px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      background: rgba(255, 250, 241, .68);
+    }
+
+    .step .num {
+      color: var(--blue);
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .step strong {
+      display: block;
+      margin: 15px 0 8px;
+      font-size: 19px;
+      letter-spacing: -.03em;
+    }
+
+    .step span {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.42;
+    }
+
+    .timeline-curve {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      gap: 24px 18px;
+      align-self: center;
+      padding: 22px 0 14px;
+    }
+
+    .timeline-curve::before {
+      content: "";
+      position: absolute;
+      left: 8%;
+      right: 8%;
+      top: 50%;
+      height: 58px;
+      transform: translateY(-50%);
+      border-top: 2px solid var(--line-strong);
+      border-bottom: 2px solid var(--line-strong);
+      border-radius: 999px;
+      opacity: .55;
+      pointer-events: none;
+    }
+
+    .timeline-curve .step {
+      min-height: 126px;
+      background: #f0e2cf;
+      position: relative;
+      z-index: 1;
+      box-shadow: inset 0 0 0 1px rgba(255, 250, 241, .44);
+    }
+
+    .timeline-curve .step::before {
+      content: "";
+      position: absolute;
+      left: 18px;
+      top: -16px;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: var(--blue);
+      border: 4px solid var(--paper);
+      box-shadow: 0 0 0 1px var(--line-strong);
+    }
+
+    .timeline-curve .step:nth-child(n+5)::before {
+      top: auto;
+      bottom: -16px;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 20px;
+      align-content: center;
+    }
+
+    .week {
+      display: grid;
+      grid-template-columns: 96px 1fr;
+      gap: 20px;
+      align-items: center;
+      padding: 15px 18px;
+      border: 1px solid var(--line);
+      background: rgba(255, 250, 241, .68);
+      position: relative;
+    }
+
+    .week:not(:last-child)::after {
+      content: "↓";
+      position: absolute;
+      left: 48px;
+      bottom: -19px;
+      color: var(--blue);
+      font-family: var(--mono);
+      font-size: 18px;
+      font-weight: 900;
+      line-height: 1;
+      z-index: 2;
+    }
+
+    .week strong {
+      color: var(--blue);
+      font-family: var(--mono);
+      font-size: 13px;
+    }
+
+    .week span {
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .stat {
+      display: grid;
+      place-items: center;
+      min-height: 320px;
+      background: var(--red);
+      color: var(--paper);
+      padding: 30px;
+      text-align: center;
+    }
+
+    .stat strong {
+      display: block;
+      font-family: var(--serif);
+      font-size: 130px;
+      line-height: .8;
+      font-weight: 500;
+    }
+
+    .stat span {
+      display: block;
+      max-width: 260px;
+      margin-top: 24px;
+      color: rgba(247, 243, 235, .72);
+      font-size: 22px;
+      line-height: 1.36;
+      letter-spacing: -.03em;
+    }
+
+    .collab-layout {
+      align-items: stretch;
+      align-self: center;
+    }
+
+    .collab-copy {
+      display: grid;
+      align-content: start;
+      padding: 0;
+    }
+
+    .collab-layout .stat {
+      min-height: 0;
+      height: auto;
+      align-self: stretch;
+    }
+
+    .prompt {
+      margin: 0;
+      padding: 24px;
+      border: 1px solid var(--line);
+      background: var(--red);
+      color: var(--paper);
+      font-family: var(--mono);
+      font-size: 16px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+
+    .appendix-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+      align-items: stretch;
+    }
+
+    .tool-shot {
+      display: grid;
+      grid-template-rows: auto auto auto;
+      gap: 10px;
+      min-height: 0;
+      padding: 16px;
+      border: 1px solid var(--line);
+      background: rgba(255, 250, 241, .7);
+    }
+
+    .tool-shot h3 {
+      font-size: 18px;
+      line-height: 1.08;
+    }
+
+    .tool-shot p {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.42;
+    }
+
+    .mock-screen {
+      display: grid;
+      grid-template-rows: 22px 1fr;
+      min-height: 210px;
+      overflow: hidden;
+      border: 1px solid var(--line-strong);
+      background: var(--paper-2);
+    }
+
+    .mock-top {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      padding: 0 8px;
+      border-bottom: 1px solid var(--line);
+      background: var(--sand);
+    }
+
+    .mock-top i {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--ink);
+      opacity: .35;
+    }
+
+    .mock-body {
+      padding: 12px;
+      display: grid;
+      gap: 9px;
+      align-content: start;
+    }
+
+    .mock-line {
+      height: 9px;
+      background: rgba(17, 17, 15, .16);
+    }
+
+    .mock-line.short { width: 52%; }
+    .mock-line.mid { width: 72%; }
+    .mock-line.blue { background: rgba(23, 78, 232, .55); }
+
+    .mock-card {
+      min-height: 46px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, .55);
+    }
+
+    .mock-phone {
+      width: 76px;
+      min-height: 154px;
+      margin: 0 auto;
+      border: 4px solid var(--ink);
+      border-radius: 18px;
+      background: var(--paper-2);
+      padding: 14px 8px;
+      display: grid;
+      gap: 8px;
+      align-content: start;
+    }
+
+    .real-shot {
+      width: 100%;
+      height: 190px;
+      object-fit: cover;
+      object-position: top left;
+      border: 1px solid var(--line-strong);
+      background: var(--paper-2);
+      display: block;
+    }
+
+    .foot {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .progress {
+      position: fixed;
+      left: 28px;
+      right: 28px;
+      bottom: 18px;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+
+    .bar {
+      flex: 1;
+      height: 2px;
+      background: rgba(17, 17, 15, .14);
+    }
+
+    .bar i {
+      display: block;
+      width: 0%;
+      height: 100%;
+      background: var(--ink);
+    }
+
+    .nav {
+      position: fixed;
+      right: 28px;
+      bottom: 42px;
+      z-index: 10;
+      display: flex;
+      gap: 8px;
+    }
+
+    .nav button {
+      width: 38px;
+      height: 38px;
+      border: 1px solid var(--line);
+      background: rgba(247, 243, 235, .92);
+      color: var(--ink);
+      cursor: pointer;
+    }
+
+    @media (max-width: 860px) {
+      html, body {
+        overflow: auto;
+      }
+
+      .deck {
+        height: auto;
+      }
+
+      section,
+      section.active {
+        position: relative;
+        display: block;
+        min-height: 100vh;
+        padding: 16px;
+      }
+
+      section:not(.active) {
+        display: none;
+      }
+
+      .slide {
+        height: auto;
+        min-height: calc(100vh - 32px);
+      }
+
+      .inner {
+        padding: 30px 24px 76px;
+      }
+
+      .cover,
+      .split,
+      .account-points,
+      .grid-2,
+      .grid-3,
+      .flow,
+      .appendix-grid,
+      .timeline-curve {
+        grid-template-columns: 1fr;
+      }
+
+      .timeline-curve {
+        display: grid;
+        grid-template-rows: none;
+        gap: 14px;
+        padding: 0 0 0 20px;
+        border-left: 2px solid var(--line-strong);
+      }
+
+      .timeline-curve::before {
+        display: none;
+      }
+
+      .timeline-curve .step::before,
+      .timeline-curve .step:nth-child(n+5)::before {
+        left: -28px;
+        top: 20px;
+        bottom: auto;
+      }
+
+      .author {
+        justify-self: start;
+      }
+
+      h1 {
+        font-size: 44px;
+      }
+
+      h2 {
+        font-size: 38px;
+      }
+
+      .cover-title {
+        font-size: 36px;
+        line-height: 1.12;
+      }
+
+      .cover-title .nowrap {
+        white-space: normal;
+      }
+
+      .nowrap {
+        white-space: normal;
+      }
+
+      .flow-title {
+        white-space: normal;
+      }
+
+      .end-title {
+        white-space: normal;
+      }
+
+      .account-alert {
+        white-space: normal;
+      }
+
+      .avatar {
+        width: 44px;
+        height: 44px;
+        border-width: 2px;
+      }
+
+      .author span {
+        font-size: 9px;
+      }
+
+      .author strong {
+        font-size: 18px;
+      }
+
+      .row {
+        grid-template-columns: 1fr;
+      }
+
+      .cell {
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .cell:last-child {
+        border-bottom: none;
+      }
+
+      .progress {
+        left: 16px;
+        right: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck" aria-label="小程序 Vibe Coding 上线核心路径幻灯片">
+    <section class="active">
+      <div class="slide">
+        <div class="inner">
+          <div></div>
+          <div class="cover">
+            <div class="cover-main">
+              <div class="kicker">Designer Internal Share</div>
+              <h1 class="cover-title"><span class="nowrap">小程序 Vibe Coding 上线</span><br><span class="accent">核心路径</span></h1>
+              <p class="lead" style="margin-top:28px;">设计师零代码发布微信小程序方法分享</p>
+            </div>
+            <div class="author">
+              <img class="avatar" src="avatar.png" alt="yehlooliu 的头像">
+              <div><span>Prepared by</span><strong>yehlooliu</strong></div>
+            </div>
+          </div>
+          <div></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="slide">
+        <div class="inner">
+          <div class="meta"><strong>Premise</strong><span>02</span></div>
+          <div class="split">
+            <div><div class="kicker">核心判断</div><h2>你不需要先成为程序员，才开始做小程序</h2></div>
+            <div class="grid-2">
+              <div class="card"><div class="label">Designer</div><h3>定义产品</h3><p>用户、场景、信息架构、页面状态、体验验收。</p></div>
+              <div class="card"><div class="label">AI</div><h3>执行代码</h3><p>拆任务、生成文件、解释报错、提出最小修改方案。</p></div>
+              <div class="card"><div class="label">Validation</div><h3>持续验证</h3><p>一次只推进一个页面或功能，用真机体验判断是否可用。</p></div>
+              <div class="card dark"><div class="label">Goal</div><h3>上线标准</h3><p>核心路径跑通、真机可体验、能提交审核。</p></div>
+            </div>
+          </div>
+          <div class="foot"><span>Vibe Coding for Designers</span><span>02</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="slide">
+        <div class="inner">
+          <div class="meta"><strong>Global Map</strong><span>03</span></div>
+          <div><div class="kicker">全局</div><h2>小程序开发的三种路径</h2></div>
+          <div class="grid-3">
+            <div class="card"><div class="label">路径1 / 最快</div><h3>低代码 / 模板平台</h3><p>适合展示、预约、表单、轻电商。优势是快，限制是体验和功能受平台约束。</p></div>
+            <div class="card dark"><div class="label">路径2 / 最自主</div><h3>AI Coding + 微信云开发</h3><p>适合想做自己的产品，但不想自建服务器。后续重点展开。</p><div class="role-badge">Designer Developer Fit</div></div>
+            <div class="card"><div class="label">路径3 / 成功率高</div><h3>开发者搭架子 + AI 迭代</h3><p>适合商业目标明确、预算可控。开发者打底，你用 AI 做小迭代。</p></div>
+          </div>
+          <div class="foot"><span>Three Ways to Build</span><span>03</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="slide">
+        <div class="inner">
+          <div class="meta"><strong>Decision</strong><span>04</span></div>
+          <div><div class="kicker">怎么选</div><h2>不要用最重的方案，解决最早期的验证问题</h2></div>
+          <div class="table">
+            <div class="row head"><div class="cell">维度</div><div class="cell">路径1 模板平台</div><div class="cell">路径2 AI Coding + 云开发</div><div class="cell">路径3 开发者协作</div></div>
+            <div class="row"><div class="cell"><strong>上线速度</strong></div><div class="cell">快</div><div class="cell">中</div><div class="cell">中</div></div>
+            <div class="row"><div class="cell"><strong>自主控制</strong></div><div class="cell">低</div><div class="cell"><strong class="orange">高</strong></div><div class="cell">高</div></div>
+            <div class="row"><div class="cell"><strong>技术门槛</strong></div><div class="cell">低</div><div class="cell">中</div><div class="cell">中低</div></div>
+            <div class="row"><div class="cell"><strong>预算要求</strong></div><div class="cell">低 / 中</div><div class="cell">低</div><div class="cell">中 / 高</div></div>
+            <div class="row"><div class="cell"><strong>长期扩展</strong></div><div class="cell">弱</div><div class="cell"><strong class="orange">强</strong></div><div class="cell">强</div></div>
+          </div>
+          <div class="foot"><span>Path Selection</span><span>04</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="slide">
+        <div class="inner">
+          <div class="meta"><strong>Focus</strong><span>05</span></div>
+          <div class="split">
+            <div><div class="kicker">重点进入</div><h2 class="focus-title">路径2：<span class="nowrap">AI Coding + 微信云开发</span></h2><p class="lead" style="margin-top:22px;">AI 负责拆任务、写代码、修报错；微信云开发负责数据库、云函数、文件存储、登录；设计师负责产品定义和体验验收。</p></div>
+            <div class="card neutral">
+              <div class="label">Storage Strategy</div>
+              <h3>素材和数据怎么放</h3>
+              <div class="storage-list">
+                <div class="storage-item">
+                  <h4>短期验证：小量素材轻处理</h4>
+                  <p>少量图片、演示视频、原型素材，可以先放 GitHub 仓库，适合早期验证和内部测试。</p>
+                </div>
+                <div class="storage-item">
+                  <h4>长期运营：大量音视频进云端</h4>
+                  <p>大量视频、音频、课程文件、用户上传内容，更适合放微信云开发存储或对象存储。</p>
+                  <div class="storage-note"><strong>成本提醒：</strong>微信云开发涉及资源计费，正式上线前要估算存储体积、访问流量、云函数调用和长期成本。</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="foot"><span>Path2 Overview</span><span>05</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="slide">
+        <div class="inner">
+          <div class="meta"><strong>Toolchain</strong><span>06</span></div>
+          <div><div class="kicker">工具链</div><h2>AI Coding 只需要五类工具</h2></div>
+          <div class="grid-3">
+            <div class="card"><div class="label">AI Coding</div><h3>Codex / Cursor / Claude Code / Trae</h3><p>拆任务、写代码、解释文件结构、修复报错。</p></div>
+            <div class="card"><div class="label">Devtools</div><h3>微信开发者工具</h3><p>运行小程序、真机预览、上传版本、调试控制台。</p></div>
+            <div class="card"><div class="label">Account</div><h3>微信小程序账号</h3><p>拿 AppID、配置服务类目、提交审核和发布。</p></div>
+            <div class="card"><div class="label">CloudBase</div><h3>微信云开发</h3><p>数据库、云函数、文件存储、登录能力。</p></div>
+            <div class="card"><div class="label">Design</div><h3>Figma / Mastergo</h3><p>原型、页面状态、用户路径、验收参考。</p></div>
+            <div class="card dark"><div class="label">Rule</div><h3>一次只做一个功能</h3><p>不要让 AI 一次生成完整项目，风险最高。</p></div>
+          </div>
+          <div class="foot"><span>Minimum Stack</span><span>06</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="slide">
+        <div class="inner">
+          <div class="meta"><strong>Flow</strong><span>07</span></div>
+          <div><div class="kicker">总流程</div><h2 class="flow-title">从想法到上线，AI Coding 分成八步</h2></div>
+          <div class="flow timeline-curve">
+            <div class="step"><div class="num">01</div><strong>定义 MVP</strong><span>用户、目标、页面、功能、不做清单。</span></div>
+            <div class="step"><div class="num">02</div><strong>画页面原型</strong><span>首页、列表页、详情页、我的页。</span></div>
+            <div class="step"><div class="num">03</div><strong>AI 拆任务</strong><span>页面结构、数据表、开发顺序。</span></div>
+            <div class="step"><div class="num">04</div><strong>准备上线资料</strong><span>先记录主体、类目、AppID 等发布前置项。</span></div>
+            <div class="step"><div class="num">05</div><strong>创建项目</strong><span>微信开发者工具中建立工程。</span></div>
+            <div class="step"><div class="num">06</div><strong>Mock 跑通</strong><span>先不接数据库，把页面跳转跑通。</span></div>
+            <div class="step"><div class="num">07</div><strong>接入云开发</strong><span>数据库、登录、收藏、提交、存储。</span></div>
+            <div class="step"><div class="num">08</div><strong>审核发布</strong><span>真机测试、上传代码、提交审核。</span></div>
+          </div>
+          <div class="foot"><span>Execution Map</span><span>07</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="slide">
+        <div class="inner">
+          <div class="meta"><strong>MVP</strong><span>08</span></div>
+          <div><div class="kicker">产品定义及节奏</div><h2>第一版功能必须收窄</h2></div>
+          <div class="grid-2">
+            <div class="card dark">
+              <div class="label">Do</div>
+              <h3>第一版只做这些</h3>
+              <ul class="list" style="margin-top:20px;">
+                <li><b>1</b><span>首页、列表页、详情页、我的页</span></li>
+                <li><b>2</b><span>登录、收藏、搜索 / 标签筛选</span></li>
+                <li><b>3</b><span>云数据库内容管理</span></li>
+                <li><b>4</b><span>基础空状态、错误状态、加载状态</span></li>
+              </ul>
+            </div>
+            <div class="card">
+              <div class="label">Do Not</div>
+              <h3>第一版不要做这些</h3>
+              <ul class="list" style="margin-top:20px;">
+                <li><b>—</b><span>推荐算法、IM 聊天、复杂会员体系</span></li>
+                <li><b>—</b><span>积分系统、复杂后台、多端同步开发</span></li>
+                <li><b>—</b><span>自动化内容抓取、多人协作权限</span></li>
+                <li><b>—</b><span>没有验证前的大规模音视频上传</span></li>
+              </ul>
+            </div>
+          </div>
+          <div class="foot"><span>Scope Control</span><span>08</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="slide">
+        <div class="inner">
+          <div class="meta"><strong>Timeline</strong><span>09</span></div>
+          <div><div class="kicker">产品定义及节奏</div><h2>AI Coding 的实操时间节奏</h2></div>
+          <div class="timeline">
+            <div class="week"><strong>MVP</strong><span>定义核心用户、核心路径、页面清单、不做清单。</span></div>
+            <div class="week"><strong>原型</strong><span>完成 Figma / Mastergo 原型：主流程、空状态、错误状态、加载状态。</span></div>
+            <div class="week"><strong>Demo</strong><span>AI 生成 demo，先用 mock 数据跑通页面跳转。</span></div>
+            <div class="week"><strong>云开发</strong><span>接入登录、数据库、收藏、提交、文件存储。</span></div>
+            <div class="week"><strong>发布</strong><span>真机测试、隐私协议、类目配置、提交审核、发布。</span></div>
+          </div>
+          <div class="foot"><span>Execution Rhythm</span><span>09</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="slide">
+        <div class="inner">
+          <div class="meta"><strong>Release</strong><span>10</span></div>
+          <div><div class="kicker">账号与发布</div><h2>微信官方小程序发布流程</h2></div>
+          <div class="flow">
+            <div class="step"><div class="num">01</div><strong>注册账号</strong><span>选择主体，完成主体信息和管理员绑定。</span></div>
+            <div class="step"><div class="num">02</div><strong>完善信息</strong><span>名称、头像、简介、服务类目。</span></div>
+            <div class="step"><div class="num">03</div><strong>获取 AppID</strong><span>用于开发者工具创建项目。</span></div>
+            <div class="step"><div class="num">04</div><strong>真机预览</strong><span>确认功能、权限、异常状态。</span></div>
+            <div class="step"><div class="num">05</div><strong>上传代码</strong><span>填写版本号和项目备注。</span></div>
+            <div class="step"><div class="num">06</div><strong>提交审核</strong><span>补齐隐私协议、测试说明等。</span></div>
+            <div class="step"><div class="num">07</div><strong>审核通过</strong><span>等待平台审核结果。</span></div>
+            <div class="step"><div class="num">08</div><strong>手动发布</strong><span>审核通过后仍需点击发布。</span></div>
+          </div>
+          <div class="foot"><span>Official Flow</span><span>10</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="slide">
+        <div class="inner">
+          <div class="meta"><strong>Account</strong><span>11</span></div>
+          <div class="account-stack">
+            <div><div class="kicker">账号开通</div><h2 class="account-title">开通微信小程序账号：先判断主体</h2></div>
+            <div class="account-alert">个人主体 = 不支持小程序内微信收款。<br>只要未来有可能付费、交易、变现，直接跳过个人，选个体户或企业。</div>
+            <div class="account-points">
+              <div class="account-point"><strong>影响服务类目</strong><span>主体决定你能选哪些服务类目，类目又会影响审核材料和功能边界。</span><div class="account-mark"><b>01</b><em>Category</em></div></div>
+              <div class="account-point"><strong>影响支付能力</strong><span>是否能开通微信支付、资金结算到哪里，取决于主体类型。</span><div class="account-mark"><b>02</b><em>Payment</em></div></div>
+              <div class="account-point"><strong>影响后续变更</strong><span>主体升级或变更通常有流程成本，早期不要把商业项目注册成个人主体。</span><div class="account-mark"><b>03</b><em>Change</em></div></div>
+            </div>
+          </div>
+          <div class="foot"><span>Subject Red Line</span><span>11</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="slide">
+        <div class="inner compact-slide">
+          <div class="meta"><strong>Comparison</strong><span>12</span></div>
+          <div><div class="kicker">账号主体对比</div><h2>个人、个体户、企业的关键差异</h2></div>
+          <div class="table dense-table">
+            <div class="row head"><div class="cell">对比维度</div><div class="cell">个人主体</div><div class="cell">个体工商户（个体户）</div><div class="cell">企业主体（有限公司）</div></div>
+            <div class="row"><div class="cell"><strong>注册材料</strong></div><div class="cell">身份证 + 实名微信，<strong>不需要营业执照</strong></div><div class="cell">个体户营业执照 + 经营者身份证</div><div class="cell">公司营业执照 + 法人身份证 + <strong>对公银行账户</strong></div></div>
+            <div class="row"><div class="cell"><strong>微信认证费</strong></div><div class="cell">自愿认证：30 元 / 次；不认证也能上线基础小程序</div><div class="cell">300 元 / 年（官方标准；网传 30 元优惠活动不稳定，以平台实时为准）</div><div class="cell"><strong>300 元 / 年，每年年审</strong></div></div>
+            <div class="row"><div class="cell"><strong>微信支付（小程序内收款）</strong></div><div class="cell">❌ <strong>完全不支持</strong></div><div class="cell">✅ 支持；资金提现到<strong>经营者个人银行卡</strong></div><div class="cell">✅ 支持；资金只能提现到<strong>对公账户</strong></div></div>
+            <div class="row"><div class="cell"><strong>可选用服务类目</strong></div><div class="cell">极少，仅限纯工具、个人作品展示；<strong>禁止电商、服务售卖、商业属性功能</strong></div><div class="cell">绝大多数常规类目：零售、预约、本地服务、文创售卖；部分特殊类目（教育、医疗）不能申请</div><div class="cell"><strong>类目最全</strong>；教育、医美、平台、多商户等特殊类目均可申报（配套资质齐全即可）</div></div>
+            <div class="row"><div class="cell"><strong>关键接口限制</strong></div><div class="cell">无法获取用户手机号、不能直播、不能卡券、广告能力受限</div><div class="cell">开放绝大多数常用接口（手机号授权、附近小程序、直播、卡券）</div><div class="cell">全部接口开放，权限无限制</div></div>
+            <div class="row"><div class="cell"><strong>小程序命名限制</strong></div><div class="cell">不能使用：商城、店铺、官方等商业词汇</div><div class="cell">可使用小店、精选等；限制较少</div><div class="cell">可使用「官方、旗舰、品牌」等名称</div></div>
+            <div class="row"><div class="cell"><strong>账号数量上限</strong></div><div class="cell">一个身份证最多注册 <strong>5 个</strong> 个人小程序</div><div class="cell">一个执照最多 <strong>5 个</strong></div><div class="cell">一个执照最多 <strong>50 个</strong></div></div>
+            <div class="row"><div class="cell"><strong>资金与税务</strong></div><div class="cell">无对公资金；不存在企业报税</div><div class="cell">营收最终进入法人个人账户，需要自行留意个税申报</div><div class="cell">款项先进对公账户，必须规范做账、企业报税</div></div>
+            <div class="row"><div class="cell"><strong>主体变更</strong></div><div class="cell">几乎不能升级转个体户 / 企业（难度极高，通常只能重新注册）</div><div class="cell">可变更经营者；也可后续升级企业主体（流程繁琐）</div><div class="cell">法人、公司信息可正常变更</div></div>
+          </div>
+          <div class="foot"><span>Subject Selection</span><span>12</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="slide">
+        <div class="inner">
+          <div class="meta"><strong>Checklist</strong><span>13</span></div>
+          <div class="split checklist-layout">
+            <div><div class="kicker">审核前</div><h2>不要让审核<br>卡在基础问题</h2></div>
+            <div class="card">
+              <ul class="list">
+                <li><b>1</b><span>主体和类目匹配，功能不要越界。</span></li>
+                <li><b>2</b><span>隐私协议配置完整，用户授权说明合理。</span></li>
+                <li><b>3</b><span>核心路径可访问，必要时提供测试账号。</span></li>
+                <li><b>4</b><span>无空白页、死链、测试内容、违规营销。</span></li>
+                <li><b>5</b><span>完成真机测试，不只依赖开发者工具。</span></li>
+              </ul>
+            </div>
+          </div>
+          <div class="foot"><span>Before Review</span><span>13</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="slide">
+        <div class="inner">
+          <div class="meta"><strong>AI Collaboration</strong><span>14</span></div>
+          <div class="split collab-layout">
+            <div class="stat"><div><strong>1</strong><span>一次只让AI做<br>一个页面或一个功能</span></div></div>
+            <div class="collab-copy">
+              <div class="kicker">协作原则</div>
+              <h2>和 AI 协作，关键是控制任务颗粒度</h2>
+              <ul class="list" style="margin-top:28px;">
+                <li><b>1</b><span>不要一次让 AI 写完整项目。</span></li>
+                <li><b>2</b><span>先 mock 数据，再接云数据库。</span></li>
+                <li><b>3</b><span>报错时复制完整控制台信息。</span></li>
+                <li><b>4</b><span>要求 AI 输出“修改哪些文件 + 最小修改方案”。</span></li>
+              </ul>
+            </div>
+          </div>
+          <div class="foot"><span>Task Granularity</span><span>14</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="slide">
+        <div class="inner">
+          <div class="meta"><strong>Prompt</strong><span>15</span></div>
+          <div><div class="kicker">可复制提示词</div><h2>从一页 MVP 开始</h2></div>
+          <pre class="prompt">我是设计师，没有代码经验。
+我要做一个微信小程序，核心目标是【填写】。
+
+请帮我拆成第一版 MVP：
+1. 用户主路径
+2. 页面清单
+3. 功能清单
+4. 数据表结构
+5. 微信小程序云开发技术方案
+6. 开发顺序
+7. 第一版不要做什么
+
+请用非程序员能理解的语言。</pre>
+          <div class="foot"><span>Prompt Template</span><span>15</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="slide">
+        <div class="inner">
+          <div class="meta"><strong>Next Action</strong><span>16</span></div>
+          <div class="cover">
+            <div><div class="kicker">结束语</div><h2 class="end-title">不是学代码，而是写清楚第一版产品</h2></div>
+            <div class="card dark">
+              <div class="label">CTA</div>
+              <ul class="list">
+                <li><b>1</b><span>写一页 MVP</span></li>
+                <li><b>2</b><span>画 5 个核心页面</span></li>
+                <li><b>3</b><span>明确主体和服务类目</span></li>
+                <li><b>4</b><span>用 AI 从第一个页面开始实现</span></li>
+              </ul>
+              <p style="margin-top:26px;">核心路径跑通，真机可体验，能提交审核，就是第一版上线标准。</p>
+            </div>
+          </div>
+          <div class="foot"><span>Prepared by yehlooliu</span><span>End</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="slide">
+        <div class="inner">
+          <div class="meta"><strong>Appendix</strong><span>17</span></div>
+          <div><div class="kicker">附录</div><h2>五类工具与可视化界面对应</h2></div>
+          <div class="appendix-grid">
+            <div class="tool-shot">
+              <h3>AI Coding</h3>
+              <img class="real-shot" src="https://image.thum.io/get/width/900/crop/650/https://code.claude.com/docs/en/desktop" alt="Claude Code Desktop 界面截图">
+              <p>Codex / Cursor / Claude Code / Trae：拆任务、写代码、修报错。</p>
+            </div>
+            <div class="tool-shot">
+              <h3>微信开发者工具</h3>
+              <img class="real-shot" src="https://ask.qcloudimg.com/http-save/yehe-10127570/eb5018b904b74c82eaaf809cc8a3db3b.png" alt="微信开发者工具小程序模拟器黑色界面截图">
+              <p>运行小程序、真机预览、调试控制台、上传代码版本。</p>
+            </div>
+            <div class="tool-shot">
+              <h3>微信小程序账号</h3>
+              <img class="real-shot" src="https://image.thum.io/get/width/900/crop/650/https://mp.weixin.qq.com/" alt="微信公众平台页面截图">
+              <p>AppID、服务类目、主体信息、版本审核与发布入口。</p>
+            </div>
+            <div class="tool-shot">
+              <h3>微信云开发</h3>
+              <img class="real-shot" src="https://image.thum.io/get/width/900/crop/650/https://www.tencentcloud.com/products/tcb" alt="微信云开发 CloudBase 页面截图">
+              <p>数据库、云函数、文件存储、登录能力；正式运营要关注计费。</p>
+            </div>
+            <div class="tool-shot">
+              <h3>figma等</h3>
+              <img class="real-shot" src="https://static.mastergo.com/static/images/start_2.png" alt="Mastergo 设计工具界面截图">
+              <p>原型、页面状态、用户路径、视觉规范和体验验收参考。</p>
+            </div>
+          </div>
+          <div class="foot"><span>Tool Appendix</span><span>17</span></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="nav" aria-label="幻灯片导航">
+    <button type="button" id="prev" aria-label="上一页">↑</button>
+    <button type="button" id="next" aria-label="下一页">↓</button>
+  </div>
+  <div class="progress" aria-hidden="true">
+    <span id="current">01</span>
+    <div class="bar"><i id="bar"></i></div>
+    <span id="total">17</span>
+  </div>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll('section'));
+    const current = document.getElementById('current');
+    const total = document.getElementById('total');
+    const bar = document.getElementById('bar');
+    let index = 0;
+
+    function pad(n) {
+      return String(n).padStart(2, '0');
+    }
+
+    function render() {
+      slides.forEach((slide, i) => slide.classList.toggle('active', i === index));
+      current.textContent = pad(index + 1);
+      total.textContent = pad(slides.length);
+      bar.style.width = `${((index + 1) / slides.length) * 100}%`;
+    }
+
+    function go(delta) {
+      index = Math.max(0, Math.min(slides.length - 1, index + delta));
+      render();
+    }
+
+    document.getElementById('prev').addEventListener('click', () => go(-1));
+    document.getElementById('next').addEventListener('click', () => go(1));
+    window.addEventListener('keydown', (event) => {
+      if (['ArrowDown', 'PageDown', ' '].includes(event.key)) {
+        event.preventDefault();
+        go(1);
+      }
+      if (['ArrowUp', 'PageUp'].includes(event.key)) {
+        event.preventDefault();
+        go(-1);
+      }
+      if (event.key === 'Home') {
+        index = 0;
+        render();
+      }
+      if (event.key === 'End') {
+        index = slides.length - 1;
+        render();
+      }
+    });
+
+    render();
+  </script>
+</body>
+</html>

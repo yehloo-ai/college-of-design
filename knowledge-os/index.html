@@ -1,0 +1,1009 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Knowledge OS - Build Once, Compound Forever</title>
+  <style>
+    :root {
+      --bg: #f7f8fb;
+      --bg-2: #eef1f7;
+      --ink: #111318;
+      --muted: #697080;
+      --line: rgba(22, 25, 34, .12);
+      --glass: rgba(255, 255, 255, .64);
+      --glass-strong: rgba(255, 255, 255, .86);
+      --shadow: 0 24px 80px rgba(16, 24, 40, .12);
+      --blue: #007aff;
+      --cyan: #32d6c4;
+      --green: #34c759;
+      --yellow: #ffcc00;
+      --orange: #ff8a3d;
+      --pink: #ff375f;
+      --violet: #7c5cff;
+      --radius: 8px;
+      --max: 1180px;
+      --nav-h: 64px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #07080c;
+        --bg-2: #10131b;
+        --ink: #f4f7fb;
+        --muted: #9da6b8;
+        --line: rgba(255, 255, 255, .13);
+        --glass: rgba(19, 23, 33, .58);
+        --glass-strong: rgba(20, 24, 34, .84);
+        --shadow: 0 24px 80px rgba(0, 0, 0, .34);
+      }
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 20% 0%, rgba(0, 122, 255, .12), transparent 34rem),
+        linear-gradient(135deg, rgba(124, 92, 255, .08), transparent 38%),
+        var(--bg);
+      letter-spacing: 0;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, transparent 0 9.5%, rgba(127, 139, 165, .09) 9.6% 9.7%, transparent 9.8% 100%),
+        linear-gradient(rgba(127, 139, 165, .06) 1px, transparent 1px);
+      background-size: 12.5% 100%, 100% 72px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,.8), transparent 82%);
+      z-index: -2;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+
+    .stripe {
+      position: fixed;
+      top: -14vh;
+      left: 7vw;
+      width: min(84vw, 1100px);
+      height: 64vh;
+      pointer-events: none;
+      transform: rotate(-8deg);
+      opacity: .72;
+      filter: blur(.2px);
+      z-index: -1;
+    }
+
+    .stripe span {
+      position: absolute;
+      top: 0;
+      height: 100%;
+      width: 11%;
+      border-radius: 999px;
+      transform: skewX(-11deg);
+      background: var(--c);
+      opacity: .2;
+    }
+
+    .stripe span:nth-child(1) { --c: var(--blue); left: 2%; }
+    .stripe span:nth-child(2) { --c: var(--cyan); left: 15%; height: 78%; }
+    .stripe span:nth-child(3) { --c: var(--green); left: 28%; height: 92%; }
+    .stripe span:nth-child(4) { --c: var(--yellow); left: 41%; height: 66%; }
+    .stripe span:nth-child(5) { --c: var(--orange); left: 54%; height: 88%; }
+    .stripe span:nth-child(6) { --c: var(--pink); left: 67%; height: 72%; }
+    .stripe span:nth-child(7) { --c: var(--violet); left: 80%; height: 94%; }
+
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--nav-h);
+      display: flex;
+      align-items: center;
+      z-index: 20;
+      backdrop-filter: blur(20px);
+      background: color-mix(in srgb, var(--glass-strong), transparent 12%);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav-inner {
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 680;
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+
+    .mark {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: conic-gradient(from 180deg, var(--blue), var(--cyan), var(--green), var(--yellow), var(--pink), var(--blue));
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.46), 0 8px 24px rgba(0,122,255,.22);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .nav-links a {
+      padding: 8px 10px;
+      border-radius: 999px;
+    }
+
+    .nav-links a:hover {
+      color: var(--ink);
+      background: var(--glass);
+    }
+
+    main { padding-top: var(--nav-h); }
+
+    .section {
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+      padding: 96px 0;
+    }
+
+    .hero {
+      min-height: calc(100vh - var(--nav-h));
+      display: grid;
+      align-items: center;
+      padding-bottom: 44px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: clamp(32px, 7vw, 92px);
+      align-items: center;
+    }
+
+    .eyebrow {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 650;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      margin-bottom: 18px;
+    }
+
+    h1, h2, h3, p { margin: 0; }
+
+    h1 {
+      max-width: 860px;
+      font-size: clamp(58px, 9vw, 128px);
+      line-height: .88;
+      font-weight: 760;
+      letter-spacing: 0;
+    }
+
+    .gradient-text {
+      display: block;
+      color: transparent;
+      background: linear-gradient(90deg, var(--ink), #4b8dff 34%, #32d6c4 66%, var(--ink));
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+
+    .hero-copy {
+      margin-top: 28px;
+      max-width: 660px;
+      color: var(--muted);
+      font-size: clamp(18px, 2vw, 24px);
+      line-height: 1.5;
+    }
+
+    .hero-panel, .glass-panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, var(--glass-strong), var(--glass));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(24px);
+    }
+
+    .hero-panel {
+      min-height: 460px;
+      padding: 22px;
+      display: grid;
+      align-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(120deg, transparent, rgba(255,255,255,.22), transparent),
+        repeating-linear-gradient(90deg, transparent 0 38px, rgba(127,139,165,.1) 39px 40px);
+      opacity: .72;
+    }
+
+    .system-map, .panel-foot {
+      position: relative;
+      z-index: 1;
+    }
+
+    .system-map {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      min-height: 290px;
+    }
+
+    .map-cell {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 14px;
+      background: rgba(255,255,255,.12);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 92px;
+    }
+
+    .map-cell strong { font-size: 14px; }
+    .map-cell span { color: var(--muted); font-size: 12px; line-height: 1.35; }
+
+    .panel-foot {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      color: var(--muted);
+      font-size: 13px;
+      border-top: 1px solid var(--line);
+      padding-top: 18px;
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: .72fr 1fr;
+      gap: 36px;
+      align-items: end;
+      margin-bottom: 38px;
+    }
+
+    .kicker {
+      color: var(--blue);
+      font-size: 13px;
+      font-weight: 720;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    h2 {
+      font-size: clamp(34px, 5vw, 68px);
+      line-height: .98;
+      font-weight: 740;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      color: var(--muted);
+      font-size: clamp(16px, 1.7vw, 20px);
+      line-height: 1.65;
+    }
+
+    .pyramid-wrap {
+      display: grid;
+      grid-template-columns: minmax(320px, .9fr) 1fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .pyramid {
+      padding: 26px;
+      min-height: 580px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      gap: 10px;
+      overflow: visible;
+    }
+
+    .pyramid-layer {
+      --w: 100%;
+      width: var(--w);
+      margin: 0 auto;
+      min-height: 78px;
+      display: grid;
+      grid-template-columns: 44px 1fr;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 24px;
+      color: #fff;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--c1), var(--c2));
+      box-shadow: 0 18px 50px color-mix(in srgb, var(--c2), transparent 72%);
+      position: relative;
+      transition: transform .32s ease, filter .32s ease, z-index .32s ease;
+      cursor: default;
+    }
+
+    .pyramid-layer:nth-child(1) { --w: 42%; --c1: #7c5cff; --c2: #4b8dff; }
+    .pyramid-layer:nth-child(2) { --w: 56%; --c1: #ff375f; --c2: #ff8a3d; }
+    .pyramid-layer:nth-child(3) { --w: 70%; --c1: #ffcc00; --c2: #ff8a3d; }
+    .pyramid-layer:nth-child(4) { --w: 84%; --c1: #32d6c4; --c2: #34c759; }
+    .pyramid-layer:nth-child(5) { --w: 98%; --c1: #007aff; --c2: #32d6c4; }
+
+    .pyramid-layer:hover {
+      transform: scale(1.035) translateY(-3px);
+      filter: saturate(1.08);
+      z-index: 2;
+    }
+
+    .pyramid-layer svg {
+      width: 34px;
+      height: 34px;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      fill: none;
+    }
+
+    .pyramid-layer strong { display: block; font-size: 18px; margin-bottom: 4px; }
+    .pyramid-layer span { font-size: 13px; opacity: .86; line-height: 1.35; }
+
+    .tooltip {
+      position: absolute;
+      left: calc(100% + 14px);
+      top: 50%;
+      width: 230px;
+      transform: translateY(-50%) translateX(-8px);
+      opacity: 0;
+      pointer-events: none;
+      padding: 12px 14px;
+      color: var(--ink);
+      background: var(--glass-strong);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      font-size: 13px;
+      line-height: 1.5;
+      transition: opacity .25s ease, transform .25s ease;
+    }
+
+    .pyramid-layer:hover .tooltip {
+      opacity: 1;
+      transform: translateY(-50%) translateX(0);
+    }
+
+    .principles {
+      display: grid;
+      gap: 12px;
+    }
+
+    .principle {
+      padding: 22px;
+      border-left: 2px solid var(--blue);
+    }
+
+    .principle strong { display: block; margin-bottom: 8px; }
+    .principle p { color: var(--muted); line-height: 1.6; font-size: 15px; }
+
+    .flywheel-grid {
+      display: grid;
+      grid-template-columns: 1.05fr .75fr;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .flywheel {
+      padding: 20px;
+      min-height: 680px;
+      display: grid;
+      place-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .flywheel svg {
+      width: min(100%, 660px);
+      height: auto;
+      overflow: visible;
+    }
+
+    .wheel-ring {
+      fill: none;
+      stroke: color-mix(in srgb, var(--blue), transparent 70%);
+      stroke-width: 26;
+      stroke-linecap: round;
+      stroke-dasharray: 42 22;
+      animation: spin 28s linear infinite;
+      transform-origin: 300px 300px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .wheel-node circle {
+      fill: var(--glass-strong);
+      stroke: var(--line);
+      stroke-width: 1.2;
+      filter: drop-shadow(0 14px 24px rgba(16, 24, 40, .14));
+    }
+
+    .wheel-node text {
+      fill: var(--ink);
+      font-size: 13px;
+      font-weight: 650;
+      text-anchor: middle;
+      dominant-baseline: middle;
+    }
+
+    .wheel-core {
+      fill: color-mix(in srgb, var(--glass-strong), transparent 4%);
+      stroke: var(--line);
+      stroke-width: 1.3;
+    }
+
+    .wheel-copy {
+      padding: 34px;
+    }
+
+    .statement {
+      font-size: clamp(30px, 4vw, 54px);
+      line-height: 1.02;
+      font-weight: 740;
+      letter-spacing: 0;
+      margin-bottom: 24px;
+    }
+
+    .statement span { color: var(--blue); }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      align-items: stretch;
+      gap: 10px;
+    }
+
+    .flow-step {
+      padding: 20px 16px;
+      min-height: 160px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .flow-step::after {
+      content: "→";
+      position: absolute;
+      right: -2px;
+      top: 18px;
+      color: var(--muted);
+    }
+
+    .flow-step:last-child::after { display: none; }
+    .flow-step small { color: var(--blue); font-weight: 720; }
+    .flow-step strong { display: block; margin: 18px 0 8px; font-size: 18px; }
+    .flow-step p { color: var(--muted); font-size: 14px; line-height: 1.55; }
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .project-card {
+      padding: 22px;
+      min-height: 280px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform .28s ease, border-color .28s ease;
+    }
+
+    .project-card:hover {
+      transform: translateY(-5px);
+      border-color: color-mix(in srgb, var(--blue), var(--line) 35%);
+    }
+
+    .project-card h3 {
+      font-size: 22px;
+      margin-bottom: 12px;
+    }
+
+    .project-card p {
+      color: var(--muted);
+      line-height: 1.58;
+      font-size: 14px;
+    }
+
+    .tags, .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    .tag, .links a {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 12px;
+      color: var(--muted);
+      background: rgba(255,255,255,.08);
+    }
+
+    .links a:hover {
+      color: var(--ink);
+      border-color: var(--blue);
+    }
+
+    .timeline {
+      position: relative;
+      display: grid;
+      gap: 18px;
+      padding-left: 28px;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 7px;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: linear-gradient(var(--blue), var(--cyan), transparent);
+    }
+
+    .entry {
+      position: relative;
+      padding: 22px;
+    }
+
+    .entry::before {
+      content: "";
+      position: absolute;
+      left: -26px;
+      top: 27px;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: var(--blue);
+      box-shadow: 0 0 0 6px color-mix(in srgb, var(--blue), transparent 82%);
+    }
+
+    .entry time {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 650;
+    }
+
+    .entry h3 {
+      font-size: 22px;
+      margin: 8px 0;
+    }
+
+    .entry p {
+      color: var(--muted);
+      line-height: 1.62;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .portrait {
+      padding: 24px;
+      min-height: 520px;
+      display: grid;
+      align-content: space-between;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .portrait::after {
+      content: "";
+      position: absolute;
+      inset: auto -20% -28% 18%;
+      height: 72%;
+      background: conic-gradient(from 120deg, var(--blue), var(--cyan), var(--green), var(--yellow), var(--pink), var(--blue));
+      filter: blur(38px);
+      opacity: .34;
+      border-radius: 50%;
+    }
+
+    .portrait h3 {
+      position: relative;
+      z-index: 1;
+      font-size: clamp(34px, 4vw, 58px);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .values {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 10px;
+    }
+
+    .value {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 14px 0;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+    }
+
+    .value strong { color: var(--ink); }
+
+    .story {
+      padding: 30px;
+    }
+
+    .story p {
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.8;
+      margin-bottom: 18px;
+    }
+
+    .mini-timeline {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 30px;
+    }
+
+    .mini-timeline div {
+      border-top: 1px solid var(--line);
+      padding-top: 12px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .mini-timeline strong {
+      color: var(--ink);
+      display: block;
+      margin-bottom: 6px;
+      font-size: 15px;
+    }
+
+    footer {
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+      padding: 38px 0 58px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      font-size: 14px;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(26px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .001ms !important;
+      }
+    }
+
+    @media (max-width: 980px) {
+      .nav-links { display: none; }
+      .hero-grid,
+      .section-head,
+      .pyramid-wrap,
+      .flywheel-grid,
+      .about-grid {
+        grid-template-columns: 1fr;
+      }
+      .hero { min-height: auto; padding-top: 80px; }
+      .flow, .project-grid { grid-template-columns: 1fr 1fr; }
+      .tooltip {
+        left: 18px;
+        right: 18px;
+        top: auto;
+        bottom: calc(100% + 10px);
+        width: auto;
+        transform: translateY(8px);
+      }
+      .pyramid-layer:hover .tooltip { transform: translateY(0); }
+    }
+
+    @media (max-width: 640px) {
+      .section { padding: 70px 0; }
+      .hero-panel { min-height: 380px; }
+      .system-map { grid-template-columns: 1fr; }
+      .pyramid { min-height: 520px; padding: 16px; }
+      .pyramid-layer {
+        width: 100%;
+        min-height: 74px;
+        padding: 12px 14px;
+      }
+      .pyramid-layer strong { font-size: 16px; }
+      .flywheel { min-height: 540px; padding: 8px; }
+      .flow, .project-grid, .mini-timeline { grid-template-columns: 1fr; }
+      .flow-step::after {
+        content: "↓";
+        top: auto;
+        bottom: 6px;
+        right: 18px;
+      }
+      footer { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="stripe" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+  </div>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="#top" aria-label="Knowledge OS Home">
+        <span class="mark" aria-hidden="true"></span>
+        <span>Knowledge OS</span>
+      </a>
+      <div class="nav-links" aria-label="Page navigation">
+        <a href="#pyramid">资产</a>
+        <a href="#flywheel">飞轮</a>
+        <a href="#flow">流程</a>
+        <a href="#projects">项目库</a>
+        <a href="#thinking">思考</a>
+        <a href="#about">关于我</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="top">
+    <section class="section hero">
+      <div class="hero-grid">
+        <div class="reveal">
+          <p class="eyebrow">AI 时代知识工作者的成长操作系统</p>
+          <h1>Build Once <span class="gradient-text">Compound Forever</span></h1>
+          <p class="hero-copy">Knowledge OS 不是普通作品集，而是一套持续积累的知识体系：把项目、复盘、内容、信任和商业机会连接成一个会自我增值的系统。</p>
+        </div>
+        <aside class="hero-panel reveal" aria-label="Knowledge OS system map">
+          <div class="system-map">
+            <div class="map-cell"><strong>Projects</strong><span>真实问题驱动的 AI 工具</span></div>
+            <div class="map-cell"><strong>Reflection</strong><span>录音、复盘、结构化洞察</span></div>
+            <div class="map-cell"><strong>Publishing</strong><span>公众号、小红书、作品集同步输出</span></div>
+            <div class="map-cell"><strong>Trust</strong><span>公开过程建立长期可信度</span></div>
+            <div class="map-cell"><strong>Assets</strong><span>能力、作品、内容不断沉淀</span></div>
+            <div class="map-cell"><strong>Loop</strong><span>反馈进入下一轮构建</span></div>
+          </div>
+          <div class="panel-foot">
+            <span>Single Source</span>
+            <span>Multiple Outputs</span>
+            <span>Compounding System</span>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" id="pyramid">
+      <div class="section-head reveal">
+        <div>
+          <p class="kicker">Chapter 01</p>
+          <h2>知识资产金字塔</h2>
+        </div>
+        <p class="lead">从能力到商业，每一层都不是一次性成果，而是可以复用、证明、传播和交易的知识资产。</p>
+      </div>
+
+      <div class="pyramid-wrap">
+        <div class="pyramid glass-panel reveal" aria-label="Knowledge asset pyramid">
+          <div class="pyramid-layer">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l7 4v6c0 5-3 8-7 10-4-2-7-5-7-10V6l7-4z"/><path d="M9 12l2 2 4-5"/></svg>
+            <div><strong>商业资产</strong><span>把可信能力转化为咨询、产品、合作和现金流。</span></div>
+            <div class="tooltip">最上层不是“卖东西”，而是让长期积累的专业判断被市场准确看见。</div>
+          </div>
+          <div class="pyramid-layer">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 1 16 0 8 8 0 0 1-16 0z"/><path d="M8 12h8M12 8v8"/></svg>
+            <div><strong>信任资产</strong><span>公开过程、稳定交付和真实反馈，形成可验证信用。</span></div>
+            <div class="tooltip">信任来自连续记录：你如何发现问题、做出判断、修正方案，比结果截图更重要。</div>
+          </div>
+          <div class="pyramid-layer">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14v16H5z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
+            <div><strong>内容资产</strong><span>项目副产品被拆成文章、短帖、脚本和方法论。</span></div>
+            <div class="tooltip">内容不是额外负担，而是项目过程自然产生的解释、复盘、案例和判断。</div>
+          </div>
+          <div class="pyramid-layer">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16v11H4z"/><path d="M8 7V5h8v2M8 13h8"/></svg>
+            <div><strong>作品资产</strong><span>每个 AI 工具都能公开展示、演示和被再次调用。</span></div>
+            <div class="tooltip">作品是能力的证据，也是未来项目的组件库、案例库和信任入口。</div>
+          </div>
+          <div class="pyramid-layer">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M5 8h14M7 16h10"/><path d="M4 20h16"/></svg>
+            <div><strong>能力资产</strong><span>提示、研究、设计、工程、表达和判断力持续复利。</span></div>
+            <div class="tooltip">底层能力决定系统上限：不是学一个工具，而是训练自己把模糊问题变成可运行系统。</div>
+          </div>
+        </div>
+
+        <div class="principles reveal">
+          <div class="principle glass-panel"><strong>能力被项目锚定</strong><p>不为学习而学习，把每次能力训练落到一个可运行、可解释、可复用的 AI 项目里。</p></div>
+          <div class="principle glass-panel"><strong>项目被内容放大</strong><p>一个项目不是终点，它会变成复盘、文章、作品页、演示链接和下一次机会的入口。</p></div>
+          <div class="principle glass-panel"><strong>内容被信任承接</strong><p>持续公开过程，让别人看见你的判断、品味、方法和稳定性。</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="flywheel">
+      <div class="section-head reveal">
+        <div>
+          <p class="kicker">Chapter 02</p>
+          <h2>成长飞轮</h2>
+        </div>
+        <p class="lead">真正的增长不是线性流程，而是一轮又一轮把真实问题转化为作品、内容、反馈和更好问题的循环。</p>
+      </div>
+
+      <div class="flywheel-grid">
+        <div class="flywheel glass-panel reveal">
+          <svg viewBox="0 0 600 600" role="img" aria-label="Growth flywheel">
+            <circle class="wheel-ring" cx="300" cy="300" r="194"></circle>
+            <circle class="wheel-core" cx="300" cy="300" r="112"></circle>
+            <text x="300" y="286" text-anchor="middle" fill="currentColor" font-size="24" font-weight="760">Knowledge OS</text>
+            <text x="300" y="318" text-anchor="middle" fill="currentColor" opacity=".62" font-size="14">Project Driven Growth</text>
+            <g class="wheel-node" transform="translate(300 72)"><circle r="48"/><text><tspan x="0" y="-8">发现</tspan><tspan x="0" y="10">真实问题</tspan></text></g>
+            <g class="wheel-node" transform="translate(424 94)"><circle r="42"/><text><tspan x="0" y="-8">做 AI</tspan><tspan x="0" y="10">项目</tspan></text></g>
+            <g class="wheel-node" transform="translate(519 181)"><circle r="43"/><text><tspan x="0" y="-8">GitHub</tspan><tspan x="0" y="10">公开</tspan></text></g>
+            <g class="wheel-node" transform="translate(540 305)"><circle r="42"/><text><tspan x="0" y="-8">录音</tspan><tspan x="0" y="10">复盘</tspan></text></g>
+            <g class="wheel-node" transform="translate(492 425)"><circle r="42"/><text><tspan x="0" y="-8">AI</tspan><tspan x="0" y="10">总结</tspan></text></g>
+            <g class="wheel-node" transform="translate(384 502)"><circle r="43"/><text><tspan x="0" y="-8">拆分</tspan><tspan x="0" y="10">内容</tspan></text></g>
+            <g class="wheel-node" transform="translate(252 523)"><circle r="40"/><text><tspan x="0" y="-8">公众号</tspan><tspan x="0" y="10">发布</tspan></text></g>
+            <g class="wheel-node" transform="translate(132 470)"><circle r="42"/><text><tspan x="0" y="-8">小红书</tspan><tspan x="0" y="10">种草</tspan></text></g>
+            <g class="wheel-node" transform="translate(65 356)"><circle r="43"/><text><tspan x="0" y="-8">作品集</tspan><tspan x="0" y="10">沉淀</tspan></text></g>
+            <g class="wheel-node" transform="translate(78 226)"><circle r="42"/><text><tspan x="0" y="-8">获取</tspan><tspan x="0" y="10">反馈</tspan></text></g>
+            <g class="wheel-node" transform="translate(173 116)"><circle r="45"/><text><tspan x="0" y="-8">进入</tspan><tspan x="0" y="10">下一轮</tspan></text></g>
+          </svg>
+        </div>
+        <div class="wheel-copy glass-panel reveal">
+          <p class="statement">Content is <span>By-product</span> of Projects</p>
+          <p class="lead">内容不是从空白文档里硬写出来的。它来自真实项目中的取舍、失败、洞察、对比、演示和复盘。项目越真，内容越有密度；循环越稳定，增长越不用靠灵感。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="flow">
+      <div class="section-head reveal">
+        <div>
+          <p class="kicker">Chapter 03</p>
+          <h2>单一来源，多出口</h2>
+        </div>
+        <p class="lead">Create Once Publish Everywhere。把一个项目变成一组可分发、可沉淀、可复用的知识模块。</p>
+      </div>
+      <div class="flow reveal">
+        <div class="flow-step glass-panel"><small>01</small><strong>项目</strong><p>从真实需求出发，做出一个可演示的 AI 工具或工作流。</p></div>
+        <div class="flow-step glass-panel"><small>02</small><strong>录音</strong><p>边做边讲，保留决策过程、卡点和关键判断。</p></div>
+        <div class="flow-step glass-panel"><small>03</small><strong>AI 整理</strong><p>把录音变成结构化复盘、文章大纲和素材库。</p></div>
+        <div class="flow-step glass-panel"><small>04</small><strong>分发</strong><p>适配公众号、小红书、作品集、GitHub 和演示页。</p></div>
+        <div class="flow-step glass-panel"><small>05</small><strong>复利</strong><p>反馈回流到项目库，成为下一轮构建的燃料。</p></div>
+      </div>
+    </section>
+
+    <section class="section" id="projects">
+      <div class="section-head reveal">
+        <div>
+          <p class="kicker">Chapter 04</p>
+          <h2>项目库</h2>
+        </div>
+        <p class="lead">每个 AI 工具都是一张作品卡：记录项目、思考、反思，也连接 GitHub、演示和文章。</p>
+      </div>
+      <div class="project-grid reveal">
+        <article class="project-card glass-panel">
+          <div><h3>AI Research Console</h3><p>把碎片信息整理成可追踪的研究面板，训练问题定义、资料筛选和结论表达。</p><div class="tags"><span class="tag">项目</span><span class="tag">思考</span><span class="tag">反思</span></div></div>
+          <div class="links"><a href="#">GitHub</a><a href="#">演示</a><a href="#">文章</a></div>
+        </article>
+        <article class="project-card glass-panel">
+          <div><h3>Prompt Operating Kit</h3><p>将高频提示词变成可复用模块，让个人工作流逐渐从经验变成系统。</p><div class="tags"><span class="tag">提示工程</span><span class="tag">工作流</span></div></div>
+          <div class="links"><a href="#">GitHub</a><a href="#">演示</a><a href="#">文章</a></div>
+        </article>
+        <article class="project-card glass-panel">
+          <div><h3>Portfolio Generator</h3><p>把项目事实、复盘和链接自动整理成作品页，减少展示成本，提高可信度。</p><div class="tags"><span class="tag">作品集</span><span class="tag">发布</span></div></div>
+          <div class="links"><a href="#">GitHub</a><a href="#">演示</a><a href="#">文章</a></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="thinking">
+      <div class="section-head reveal">
+        <div>
+          <p class="kicker">Chapter 05</p>
+          <h2>思考时间轴</h2>
+        </div>
+        <p class="lead">公众号和小红书内容自动聚合为持续成长日志：每条内容都回到一个项目、一次复盘或一个真实问题。</p>
+      </div>
+      <div class="timeline reveal">
+        <article class="entry glass-panel"><time>Week 01</time><h3>从工具使用者到系统构建者</h3><p>记录第一次把 AI 项目、录音复盘和公开发布连接起来的过程。</p></article>
+        <article class="entry glass-panel"><time>Week 02</time><h3>为什么内容应该是项目副产品</h3><p>拆解一篇公众号长文如何来自一次真实项目复盘，而不是单独选题。</p></article>
+        <article class="entry glass-panel"><time>Week 03</time><h3>作品卡比简历更接近未来</h3><p>用 GitHub、演示、文章和反思共同证明一个人的问题解决能力。</p></article>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <div class="section-head reveal">
+        <div>
+          <p class="kicker">Chapter 06</p>
+          <h2>关于我</h2>
+        </div>
+        <p class="lead">这不是简历，而是一段持续构建知识资产的叙事：我把每次学习、项目和表达都放回同一个长期系统。</p>
+      </div>
+      <div class="about-grid">
+        <aside class="portrait glass-panel reveal">
+          <h3>持续构建，而不是一次展示。</h3>
+          <div class="values">
+            <div class="value"><strong>价值观</strong><span>真实问题优先</span></div>
+            <div class="value"><strong>方法</strong><span>做中学，做后讲</span></div>
+            <div class="value"><strong>目标</strong><span>让知识资产持续复利</span></div>
+          </div>
+        </aside>
+        <article class="story glass-panel reveal">
+          <p>我把自己看成一个持续构建知识资产的人。AI 不是替我完成表达的捷径，而是让我更快把模糊经验整理成系统，把一次项目变成可复用的方法，把一次复盘变成可以被别人理解和检验的内容。</p>
+          <p>Knowledge OS 的核心不是“更多产出”，而是更少浪费：同一个项目不只停留在本地文件夹，它会进入项目库、内容库、信任库和下一轮问题库。</p>
+          <div class="mini-timeline">
+            <div><strong>Observe</strong>发现真实问题和重复工作。</div>
+            <div><strong>Build</strong>做出可运行的 AI 项目。</div>
+            <div><strong>Reflect</strong>录音复盘并结构化沉淀。</div>
+            <div><strong>Publish</strong>公开作品，获得反馈，进入下一轮。</div>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>Knowledge OS</span>
+    <span>Build Once, Compound Forever</span>
+  </footer>
+
+  <script>
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add('is-visible');
+      });
+    }, { threshold: 0.14 });
+
+    reveals.forEach((el) => observer.observe(el));
+
+    const stripe = document.querySelector('.stripe');
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY || 0;
+      stripe.style.transform = `translateY(${y * 0.05}px) rotate(${-8 + y * 0.002}deg)`;
+    }, { passive: true });
+  </script>
+</body>
+</html>

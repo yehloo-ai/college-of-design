@@ -4,6 +4,14 @@
 
 **Status: Coming Soon**
 
+## Showcase Projects
+
+- [College of Design](https://yehloo-ai.github.io/college-of-design/) — AI-era design learning platform
+- [Mini Program Development Guide](https://yehloo-ai.github.io/college-of-design/slide/) — WeChat mini-program learning slides
+- [Knowledge OS](https://yehloo-ai.github.io/college-of-design/knowledge-os/) — Build Once, Compound Forever
+
+Display-focused websites, presentations, and public prototypes are stored in independent top-level directories in this repository.
+
 A curated knowledge platform for designers growing in the AI era. Three focused tracks, hand-picked resources, no fluff.
 
 ---

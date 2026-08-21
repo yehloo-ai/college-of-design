@@ -1,6 +1,6 @@
 # College of Design
 
-**Live →** [yehloolau-afk.github.io/college-of-design](https://yehloolau-afk.github.io/college-of-design/)
+**Live →** [yehloo-ai.github.io/college-of-design](https://yehloo-ai.github.io/college-of-design/)
 
 **Status: Coming Soon**
 

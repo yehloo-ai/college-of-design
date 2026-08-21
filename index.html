@@ -261,6 +261,35 @@ footer{background:#fff;border-top:1px solid var(--bd);padding:20px 0}
 .ft-l:hover{color:var(--pr)}
 .ft-copy{font-size:12px;color:var(--t3)}
 
+/* Desktop content parity: keep the updated mobile titles readable on larger screens. */
+@media(min-width:768px){
+  .g2{align-items:stretch}
+  .g2 .ac,.g2 .vc{display:flex;flex-direction:column;height:100%}
+  .g2 .ac-body,.g2 .vc-body{display:flex;flex:1;flex-direction:column}
+  .g2 .ac-title,.g2 .vc-title{
+    min-height:3em;
+    white-space:normal;
+    display:-webkit-box;
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp:2;
+    overflow:hidden;
+  }
+  .g2 .ac-desc{
+    min-height:3.2em;
+    white-space:normal;
+    display:-webkit-box;
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp:2;
+    overflow:hidden;
+  }
+  .g2 .vc-sub{
+    min-height:1.6em;
+    white-space:normal;
+    overflow:hidden;
+  }
+  .g2 .ac-foot,.g2 .vc-foot{margin-top:auto}
+}
+
 /* ════════════════════════════════
    BOTTOM TAB NAV (hidden on desktop)
    ════════════════════════════════ */

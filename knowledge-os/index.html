@@ -611,7 +611,7 @@
 
     .flywheel {
       padding: 18px;
-      min-height: 760px;
+      min-height: 800px;
       display: grid;
       place-items: center;
       position: relative;
@@ -619,59 +619,125 @@
     }
 
     .flywheel svg {
-      width: min(100%, 620px);
+      width: min(100%, 680px);
       height: auto;
       overflow: visible;
     }
 
-    .spiral-shadow,
-    .spiral-path,
-    .spiral-guide {
+    .helix-depth,
+    .helix-tube,
+    .helix-highlight,
+    .helix-ring-back,
+    .helix-ring-front {
       fill: none;
       stroke-linecap: round;
+      stroke-linejoin: round;
     }
 
-    .spiral-shadow {
-      stroke: rgba(16, 24, 40, .12);
+    .helix-floor {
+      fill: url(#helixFloor);
+      opacity: .7;
+    }
+
+    .helix-axis {
+      stroke: url(#axisGradient);
+      stroke-width: 1.5;
+      stroke-dasharray: 3 10;
+    }
+
+    .helix-ring-back {
+      stroke: color-mix(in srgb, var(--ink), transparent 90%);
+      stroke-width: 10;
+      stroke-dasharray: 4 10;
+    }
+
+    .helix-ring-front {
+      stroke: url(#helixRimGradient);
+      stroke-width: 12;
+      opacity: .58;
+      filter: drop-shadow(0 8px 10px rgba(16, 24, 40, .14));
+    }
+
+    .helix-depth {
+      stroke: rgba(16, 24, 40, .2);
+      stroke-width: 44;
+      transform: translateY(12px);
+      filter: blur(2px);
+    }
+
+    .helix-tube {
+      stroke: url(#helixTubeGradient);
       stroke-width: 34;
-      transform: translateY(9px);
+      filter: url(#helixShadow);
     }
 
-    .spiral-path {
-      stroke: url(#spiralGradient);
-      stroke-width: 18;
-      stroke-dasharray: 22 10;
-      animation: climb 14s linear infinite;
-      filter: drop-shadow(0 18px 24px rgba(0, 122, 255, .2));
+    .helix-highlight {
+      stroke: rgba(255, 255, 255, .7);
+      stroke-width: 5;
+      stroke-dasharray: 110 890;
+      animation: helix-light 9s linear infinite;
+      opacity: .76;
     }
 
-    .spiral-guide {
-      stroke: color-mix(in srgb, var(--ink), transparent 88%);
-      stroke-width: 1;
-      stroke-dasharray: 3 9;
-    }
+    @keyframes helix-light { to { stroke-dashoffset: -1000; } }
 
-    @keyframes climb { to { stroke-dashoffset: -320; } }
-
-    .spiral-node circle {
-      fill: var(--glass-strong);
-      stroke: var(--line);
-      stroke-width: 1.2;
-      filter: drop-shadow(0 14px 24px rgba(16, 24, 40, .14));
-    }
-
-    .spiral-node text {
-      fill: var(--ink);
-      font-size: 14px;
+    .helix-rise-label {
+      fill: var(--muted);
+      font-size: 11px;
       font-weight: 760;
+      text-anchor: middle;
+      letter-spacing: .08em;
+    }
+
+    .helix-stage {
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+    }
+
+    .stage-orb {
+      fill: url(#stageOrb);
+      stroke: rgba(255, 255, 255, .82);
+      stroke-width: 1.4;
+      filter: url(#stageShadow);
+    }
+
+    .stage-number {
+      fill: #fff;
+      font-size: 10px;
+      font-weight: 800;
       text-anchor: middle;
       dominant-baseline: middle;
     }
 
-    .spiral-node.validation circle {
-      fill: color-mix(in srgb, var(--orange), var(--glass-strong) 72%);
+    .stage-chip rect {
+      fill: var(--glass-strong);
+      stroke: var(--line);
+      stroke-width: 1;
+      filter: url(#chipShadow);
+      transition: fill .25s ease, stroke .25s ease;
+    }
+
+    .stage-chip text {
+      fill: var(--ink);
+      font-size: 13px;
+      font-weight: 720;
+      dominant-baseline: middle;
+    }
+
+    .helix-stage:hover .stage-chip rect {
+      fill: color-mix(in srgb, var(--glass-strong), var(--blue) 8%);
+      stroke: color-mix(in srgb, var(--blue), transparent 48%);
+    }
+
+    .helix-stage.validation .stage-orb {
+      fill: url(#validationOrb);
       stroke: var(--orange);
     }
+
+    .helix-stage.validation .stage-chip rect {
+      stroke: color-mix(in srgb, var(--orange), transparent 34%);
+    }
+
+    .helix-stage.validation .stage-chip text { fill: var(--orange); }
 
     .wheel-copy {
       padding: 30px;
@@ -723,38 +789,6 @@
       font-size: 13px;
       font-weight: 680;
     }
-
-    .wheel-steps {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 0 18px;
-      margin-top: 24px;
-    }
-
-    .wheel-step {
-      display: flex;
-      align-items: baseline;
-      gap: 9px;
-      min-height: 42px;
-      padding: 10px 0;
-      border-top: 1px solid var(--line);
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.35;
-    }
-
-    .wheel-step b {
-      color: var(--blue);
-      font-size: 11px;
-      min-width: 20px;
-    }
-
-    .wheel-step.validation {
-      color: var(--ink);
-      font-weight: 650;
-    }
-
-    .wheel-step.validation b { color: var(--orange); }
 
     .signal-note {
       margin-top: 20px;
@@ -1161,9 +1195,8 @@
         padding: 12px 14px;
       }
       .pyramid-layer strong { font-size: 16px; }
-      .flywheel { min-height: 590px; padding: 8px; }
+      .flywheel { min-height: 570px; padding: 8px; }
       .wheel-copy { padding: 22px; }
-      .wheel-steps { grid-template-columns: 1fr; }
       .reuse-pipeline { padding: 16px; }
       .source-track { grid-template-columns: 1fr; }
       .reuse-step {
@@ -1322,35 +1355,124 @@
           <p class="kicker">Chapter 02</p>
           <h2>成长飞轮</h2>
         </div>
-        <p class="lead">完整飞轮保留 11 个节点，用来理解系统；每天真正执行时，只需要判断自己处在 Observe、Build、Reflect、Publish 哪个状态。</p>
+        <p class="lead">完整的 11 个节点已融入同一条上升轨道；每天真正执行时，只需要判断自己处在 Observe、Build、Reflect、Publish 哪个状态。</p>
       </div>
 
       <div class="flywheel-grid">
         <div class="flywheel glass-panel reveal">
-          <svg viewBox="0 0 600 730" role="img" aria-label="Compounding growth spiral with eleven numbered stages">
+          <svg viewBox="0 0 620 780" role="img" aria-labelledby="helix-title helix-desc">
+            <title id="helix-title">知识资产成长飞轮</title>
+            <desc id="helix-desc">从发现真实问题到进入新问题的十一个阶段，沿立体螺旋轨道向上循环。</desc>
             <defs>
-              <linearGradient id="spiralGradient" x1="0" y1="1" x2="0" y2="0">
-                <stop offset="0" stop-color="#007aff"/><stop offset=".35" stop-color="#32d6c4"/><stop offset=".7" stop-color="#ff8a3d"/><stop offset="1" stop-color="#7c5cff"/>
+              <linearGradient id="helixTubeGradient" gradientUnits="userSpaceOnUse" x1="80" y1="730" x2="500" y2="45">
+                <stop offset="0" stop-color="#086ee8"/>
+                <stop offset=".28" stop-color="#22c9c0"/>
+                <stop offset=".55" stop-color="#46bf73"/>
+                <stop offset=".76" stop-color="#ff934f"/>
+                <stop offset="1" stop-color="#7c5cff"/>
               </linearGradient>
+              <linearGradient id="helixRimGradient" gradientUnits="userSpaceOnUse" x1="70" y1="650" x2="540" y2="120">
+                <stop offset="0" stop-color="#007aff" stop-opacity=".2"/>
+                <stop offset=".45" stop-color="#32d6c4" stop-opacity=".72"/>
+                <stop offset="1" stop-color="#7c5cff" stop-opacity=".3"/>
+              </linearGradient>
+              <linearGradient id="axisGradient" x1="0" y1="1" x2="0" y2="0">
+                <stop offset="0" stop-color="#007aff" stop-opacity="0"/>
+                <stop offset=".45" stop-color="#32d6c4" stop-opacity=".36"/>
+                <stop offset="1" stop-color="#7c5cff" stop-opacity="0"/>
+              </linearGradient>
+              <radialGradient id="helixFloor">
+                <stop offset="0" stop-color="#007aff" stop-opacity=".2"/>
+                <stop offset=".62" stop-color="#32d6c4" stop-opacity=".07"/>
+                <stop offset="1" stop-color="#007aff" stop-opacity="0"/>
+              </radialGradient>
+              <radialGradient id="stageOrb" cx="32%" cy="24%">
+                <stop offset="0" stop-color="#8dd3ff"/>
+                <stop offset=".5" stop-color="#248cff"/>
+                <stop offset="1" stop-color="#0753ba"/>
+              </radialGradient>
+              <radialGradient id="validationOrb" cx="32%" cy="24%">
+                <stop offset="0" stop-color="#ffd2aa"/>
+                <stop offset=".52" stop-color="#ff934f"/>
+                <stop offset="1" stop-color="#c95316"/>
+              </radialGradient>
+              <filter id="helixShadow" x="-30%" y="-20%" width="160%" height="160%">
+                <feDropShadow dx="0" dy="16" stdDeviation="13" flood-color="#10203d" flood-opacity=".28"/>
+              </filter>
+              <filter id="stageShadow" x="-100%" y="-100%" width="300%" height="300%">
+                <feDropShadow dx="0" dy="7" stdDeviation="6" flood-color="#07152d" flood-opacity=".34"/>
+              </filter>
+              <filter id="chipShadow" x="-25%" y="-80%" width="150%" height="260%">
+                <feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#10203d" flood-opacity=".16"/>
+              </filter>
             </defs>
-            <ellipse class="spiral-guide" cx="300" cy="570" rx="220" ry="62"/>
-            <ellipse class="spiral-guide" cx="300" cy="440" rx="220" ry="62"/>
-            <ellipse class="spiral-guide" cx="300" cy="310" rx="220" ry="62"/>
-            <ellipse class="spiral-guide" cx="300" cy="180" rx="190" ry="54"/>
-            <path class="spiral-shadow" d="M300 682 C520 670 520 600 300 570 C80 540 80 470 300 440 C520 410 520 340 300 310 C80 280 80 210 300 180 C490 155 490 95 300 68"/>
-            <path class="spiral-path" d="M300 682 C520 670 520 600 300 570 C80 540 80 470 300 440 C520 410 520 340 300 310 C80 280 80 210 300 180 C490 155 490 95 300 68"/>
-            <text x="300" y="28" text-anchor="middle" fill="currentColor" opacity=".58" font-size="12" font-weight="700">EVERY LOOP STARTS HIGHER</text>
-            <g class="spiral-node" transform="translate(300 682)"><circle r="21"/><text y="1">01</text></g>
-            <g class="spiral-node" transform="translate(470 638)"><circle r="21"/><text y="1">02</text></g>
-            <g class="spiral-node" transform="translate(300 570)"><circle r="21"/><text y="1">03</text></g>
-            <g class="spiral-node" transform="translate(130 510)"><circle r="21"/><text y="1">04</text></g>
-            <g class="spiral-node" transform="translate(300 440)"><circle r="21"/><text y="1">05</text></g>
-            <g class="spiral-node" transform="translate(470 375)"><circle r="21"/><text y="1">06</text></g>
-            <g class="spiral-node" transform="translate(300 310)"><circle r="21"/><text y="1">07</text></g>
-            <g class="spiral-node" transform="translate(130 245)"><circle r="21"/><text y="1">08</text></g>
-            <g class="spiral-node validation" transform="translate(300 180)"><circle r="24"/><text y="1">09</text></g>
-            <g class="spiral-node" transform="translate(455 126)"><circle r="21"/><text y="1">10</text></g>
-            <g class="spiral-node" transform="translate(300 68)"><circle r="21"/><text y="1">11</text></g>
+
+            <text class="helix-rise-label" x="310" y="22">EACH LOOP STARTS HIGHER ↑</text>
+            <ellipse class="helix-floor" cx="310" cy="730" rx="268" ry="48"/>
+            <line class="helix-axis" x1="310" y1="710" x2="310" y2="40"/>
+
+            <g aria-hidden="true">
+              <path class="helix-ring-back" d="M70 592 A240 68 0 0 1 550 592"/>
+              <path class="helix-ring-back" d="M90 435 A220 62 0 0 1 530 435"/>
+              <path class="helix-ring-back" d="M110 294 A200 56 0 0 1 510 294"/>
+              <path class="helix-ring-back" d="M135 153 A175 48 0 0 1 485 153"/>
+            </g>
+
+            <path class="helix-depth" pathLength="1000" d="M310 718 C568 704 570 628 310 592 C60 557 78 468 310 435 C528 404 520 326 310 294 C116 265 125 190 310 153 C478 120 465 77 310 55"/>
+            <path class="helix-tube" pathLength="1000" d="M310 718 C568 704 570 628 310 592 C60 557 78 468 310 435 C528 404 520 326 310 294 C116 265 125 190 310 153 C478 120 465 77 310 55"/>
+            <path class="helix-highlight" pathLength="1000" d="M310 718 C568 704 570 628 310 592 C60 557 78 468 310 435 C528 404 520 326 310 294 C116 265 125 190 310 153 C478 120 465 77 310 55"/>
+
+            <g aria-hidden="true">
+              <path class="helix-ring-front" d="M550 592 A240 68 0 0 1 70 592"/>
+              <path class="helix-ring-front" d="M530 435 A220 62 0 0 1 90 435"/>
+              <path class="helix-ring-front" d="M510 294 A200 56 0 0 1 110 294"/>
+              <path class="helix-ring-front" d="M485 153 A175 48 0 0 1 135 153"/>
+            </g>
+
+            <g class="helix-stage" transform="translate(310 718)">
+              <circle class="stage-orb" r="17"/><text class="stage-number" y="1">01</text>
+              <g class="stage-chip" transform="translate(25 -18)"><rect width="132" height="36" rx="7"/><text x="14" y="19">发现真实问题</text></g>
+            </g>
+            <g class="helix-stage" transform="translate(510 665)">
+              <circle class="stage-orb" r="17"/><text class="stage-number" y="1">02</text>
+              <g class="stage-chip" transform="translate(-157 -18)"><rect width="132" height="36" rx="7"/><text x="14" y="19">动手做项目</text></g>
+            </g>
+            <g class="helix-stage" transform="translate(310 592)">
+              <circle class="stage-orb" r="17"/><text class="stage-number" y="1">03</text>
+              <g class="stage-chip" transform="translate(25 -18)"><rect width="116" height="36" rx="7"/><text x="14" y="19">公开证据</text></g>
+            </g>
+            <g class="helix-stage" transform="translate(93 523)">
+              <circle class="stage-orb" r="17"/><text class="stage-number" y="1">04</text>
+              <g class="stage-chip" transform="translate(25 -18)"><rect width="116" height="36" rx="7"/><text x="14" y="19">口述复盘</text></g>
+            </g>
+            <g class="helix-stage" transform="translate(310 435)">
+              <circle class="stage-orb" r="17"/><text class="stage-number" y="1">05</text>
+              <g class="stage-chip" transform="translate(25 -18)"><rect width="108" height="36" rx="7"/><text x="14" y="19">AI 整理</text></g>
+            </g>
+            <g class="helix-stage" transform="translate(493 374)">
+              <circle class="stage-orb" r="17"/><text class="stage-number" y="1">06</text>
+              <g class="stage-chip" transform="translate(-141 -18)"><rect width="116" height="36" rx="7"/><text x="14" y="19">内容分发</text></g>
+            </g>
+            <g class="helix-stage" transform="translate(310 294)">
+              <circle class="stage-orb" r="17"/><text class="stage-number" y="1">07</text>
+              <g class="stage-chip" transform="translate(25 -18)"><rect width="104" height="36" rx="7"/><text x="14" y="19">被看见</text></g>
+            </g>
+            <g class="helix-stage" transform="translate(128 231)">
+              <circle class="stage-orb" r="17"/><text class="stage-number" y="1">08</text>
+              <g class="stage-chip" transform="translate(25 -18)"><rect width="116" height="36" rx="7"/><text x="14" y="19">建立信任</text></g>
+            </g>
+            <g class="helix-stage validation" transform="translate(310 153)">
+              <circle class="stage-orb" r="19"/><text class="stage-number" y="1">09</text>
+              <g class="stage-chip" transform="translate(27 -18)"><rect width="160" height="36" rx="7"/><text x="14" y="19">需求 / 付费验证</text></g>
+            </g>
+            <g class="helix-stage" transform="translate(445 105)">
+              <circle class="stage-orb" r="17"/><text class="stage-number" y="1">10</text>
+              <g class="stage-chip" transform="translate(-141 -18)"><rect width="116" height="36" rx="7"/><text x="14" y="19">用户反馈</text></g>
+            </g>
+            <g class="helix-stage" transform="translate(310 55)">
+              <circle class="stage-orb" r="17"/><text class="stage-number" y="1">11</text>
+              <g class="stage-chip" transform="translate(25 -18)"><rect width="124" height="36" rx="7"/><text x="14" y="19">进入新问题</text></g>
+            </g>
           </svg>
         </div>
         <div class="wheel-copy glass-panel reveal">
@@ -1364,19 +1486,6 @@
           </div>
           <p class="lead">以后做任何事情，只问自己：我是在发现问题、动手做、复盘，还是发布？四个状态负责今天，完整飞轮负责长期。</p>
           <p class="wheel-mantra">Content is By-product of Projects.</p>
-          <div class="wheel-steps" aria-label="Growth spiral stages">
-            <div class="wheel-step"><b>01</b><span>发现真实问题</span></div>
-            <div class="wheel-step"><b>02</b><span>动手做项目</span></div>
-            <div class="wheel-step"><b>03</b><span>公开作品</span></div>
-            <div class="wheel-step"><b>04</b><span>口述复盘</span></div>
-            <div class="wheel-step"><b>05</b><span>AI 整理</span></div>
-            <div class="wheel-step"><b>06</b><span>内容分发</span></div>
-            <div class="wheel-step"><b>07</b><span>被看见</span></div>
-            <div class="wheel-step"><b>08</b><span>建立信任</span></div>
-            <div class="wheel-step validation"><b>09</b><span>需求 / 付费验证</span></div>
-            <div class="wheel-step"><b>10</b><span>用户反馈</span></div>
-            <div class="wheel-step"><b>11</b><span>进入新问题</span></div>
-          </div>
           <p class="signal-note"><strong>一个 49 元订单也是重要信号。</strong> 它证明专业判断开始具备真实交换价值，并为下一轮项目提供方向。</p>
         </div>
       </div>
@@ -1482,7 +1591,7 @@
       <div class="timeline reveal">
         <article class="entry glass-panel"><time>Week 01</time><h3>从工具使用者到系统构建者</h3><p>记录第一次把 AI 项目、录音复盘和公开发布连接起来的过程。</p></article>
         <article class="entry glass-panel"><time>Week 02</time><h3>为什么内容应该是项目副产品</h3><p>拆解一篇公众号长文如何来自一次真实项目复盘，而不是单独选题。</p></article>
-        <article class="entry glass-panel"><time>Week 03</time><h3>作品卡比简历更接近未来</h3><p>用 GitHub、演示、文章和反思共同证明一个人的问题解决能力。</p></article>
+        <article class="entry glass-panel"><time>Week 03</time><h3>证据链让真实能力被看见</h3><p>用 GitHub、演示、文章和反思共同证明一个人的问题解决能力。</p></article>
       </div>
     </section>
 
@@ -1492,7 +1601,7 @@
           <p class="kicker">Chapter 06</p>
           <h2>关于我</h2>
         </div>
-        <p class="lead">这不是简历，而是一段持续构建知识资产的叙事：我把每次学习、项目和表达都放回同一个长期系统。</p>
+        <p class="lead">这里记录一段持续构建知识资产的叙事：我把每次学习、项目和表达都放回同一个长期系统。</p>
       </div>
       <div class="about-grid">
         <aside class="portrait glass-panel reveal">
@@ -1505,12 +1614,12 @@
         </aside>
         <article class="story glass-panel reveal">
           <p>我把自己看成一个持续构建知识资产的人。AI 不是替我完成表达的捷径，而是让我更快把模糊经验整理成系统，把一次项目变成可复用的方法，把一次复盘变成可以被别人理解和检验的内容。</p>
-          <p>Knowledge OS 的核心不是“更多产出”，而是更少浪费：同一个项目不只停留在本地文件夹，它会进入项目库、内容库、信任库和下一轮问题库。</p>
+          <p>Knowledge OS 的核心不是“更多产出”，而是更少浪费：同一个项目不只停留在本地文件夹，它会进入能力账本、内容库、信任库和下一轮问题库。</p>
           <div class="mini-timeline">
             <div><strong>Observe</strong>发现真实问题和重复工作。</div>
             <div><strong>Build</strong>做出可运行的 AI 项目。</div>
             <div><strong>Reflect</strong>录音复盘并结构化沉淀。</div>
-            <div><strong>Publish</strong>公开作品，获得反馈，进入下一轮。</div>
+            <div><strong>Publish</strong>公开证据，获得反馈，进入下一轮。</div>
           </div>
         </article>
       </div>

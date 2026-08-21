@@ -1,55 +1,31 @@
-# College of Design
+# UX设计成长助手
 
-**Live →** [yehloo-ai.github.io/college-of-design](https://yehloo-ai.github.io/college-of-design/)
+**在线访问：** [yehloo-ai.github.io/college-of-design](https://yehloo-ai.github.io/college-of-design/)
 
-**Status: Coming Soon**
+这是“UX设计成长助手”微信小程序的网页同步版本，面向桌面端与移动端展示真实内容，并保持文章、音频与实践章节的一致性。
 
-## Showcase Projects
+## 当前内容
 
-- [College of Design](https://yehloo-ai.github.io/college-of-design/) — AI-era design learning platform
-- [Mini Program Development Guide](https://yehloo-ai.github.io/college-of-design/slide/) — WeChat mini-program learning slides
-- [Knowledge OS](https://yehloo-ai.github.io/college-of-design/knowledge-os/) — Build Once, Compound Forever
+- 10 篇设计文章，覆盖 AI 专项、UX 内容与设计思维
+- 2 期音频，包含摘要、章节目录与完整文字稿
+- 1 个“小程序 Vibe Coding 上线核心路径”实践章节，共 17 个学习节点
+- 响应式首页、分类列表、文章阅读与音频播放
 
-Display-focused websites, presentations, and public prototypes are stored in independent top-level directories in this repository.
+## 内容同步
 
-A curated knowledge platform for designers growing in the AI era. Three focused tracks, hand-picked resources, no fluff.
+网页数据由小程序内容源生成：
 
----
+```bash
+node scripts/sync-miniprogram-content.mjs "/absolute/path/to/designer-hub-miniprogram"
+```
 
-## Tracks
+脚本会读取小程序的 `utils/data.js`、`utils/bodies.js` 与 `utils/transcripts.js`，生成 `content/site-data.js`，并同步公开展示所需素材。
 
-**UX Design**
-Product design fundamentals and real-world case studies. B-end and C-end design principles, interaction logic, designer value in business.
+## 相关页面
 
-**AIGC for Designers**
-How to actually use generative AI in a design workflow. Prompt crafting, image generation, video production, workflow integration.
+- [Vibe Coding 实践章节](https://yehloo-ai.github.io/college-of-design/slide/)
+- [Knowledge OS](https://yehloo-ai.github.io/college-of-design/knowledge-os/)
 
-**Design Growth**
-Career and craft. How to grow as a designer — portfolio, influence, staying relevant in the AI era.
+## 技术
 
----
-
-## What it will be
-
-- Curated articles and videos for each track, filterable by type
-- Short summaries so you know if something is worth reading
-- Single HTML file — open and use, no install, no login
-
----
-
-## Status
-
-Core platform is built. Content curation and final polish are in progress.
-
----
-
-## Stack
-
-- Single HTML file — no framework, no backend
-- Mobile-friendly with bottom tab navigation
-
-`Claude Code` · `Vanilla HTML / CSS / JS` · `GitHub Pages`
-
----
-
-Star this to follow along.
+`Vanilla HTML / CSS / JS` · `GitHub Pages`

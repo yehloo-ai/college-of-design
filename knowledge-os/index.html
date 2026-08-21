@@ -291,6 +291,7 @@
     .map-cell small { color: var(--blue); font-size: 11px; font-weight: 760; }
     .map-cell strong { font-size: 14px; }
     .map-cell span { color: var(--muted); font-size: 12px; line-height: 1.35; }
+    .map-cell.wide { grid-column: 1 / -1; min-height: 92px; }
 
     .panel-foot {
       display: flex;
@@ -468,6 +469,107 @@
       box-shadow: 0 8px 22px color-mix(in srgb, var(--blue), transparent 70%);
     }
 
+    .core-loop-section { padding-top: 54px; }
+
+    .core-loop-board {
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .core-loop-track {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .loop-state {
+      min-height: 224px;
+      padding: 24px;
+      border: 0;
+      border-right: 1px solid var(--line);
+      color: var(--ink);
+      background: transparent;
+      text-align: left;
+      font: inherit;
+      cursor: pointer;
+      position: relative;
+      transition: background .25s ease, color .25s ease;
+    }
+
+    .loop-state:last-child { border-right: 0; }
+
+    .loop-state::after {
+      content: "→";
+      position: absolute;
+      top: 25px;
+      right: -8px;
+      z-index: 2;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1;
+    }
+
+    .loop-state:last-child::after { content: "↺"; right: 18px; }
+
+    .loop-state:hover,
+    .loop-state:focus-visible {
+      background: color-mix(in srgb, var(--blue), transparent 96%);
+      outline: none;
+    }
+
+    .loop-state.is-active {
+      color: #fff;
+      background: linear-gradient(145deg, #087bff, #4b8dff 58%, #32bdb3);
+    }
+
+    .loop-state.is-active::after { color: #fff; }
+
+    .loop-index {
+      display: block;
+      color: var(--blue);
+      font-size: 11px;
+      font-weight: 800;
+      margin-bottom: 48px;
+    }
+
+    .loop-state.is-active .loop-index,
+    .loop-state.is-active .loop-question { color: rgba(255, 255, 255, .78); }
+
+    .loop-state strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: clamp(23px, 2.5vw, 34px);
+      line-height: 1;
+    }
+
+    .loop-state em {
+      display: block;
+      margin-bottom: 22px;
+      color: var(--muted);
+      font-size: 13px;
+      font-style: normal;
+      font-weight: 700;
+    }
+
+    .loop-state.is-active em { color: rgba(255, 255, 255, .92); }
+
+    .loop-question {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .core-loop-foot {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 18px 24px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .core-loop-foot strong { color: var(--ink); }
+
     .pyramid-wrap {
       display: grid;
       grid-template-columns: minmax(320px, .88fr) 1.12fr;
@@ -582,25 +684,6 @@
 
     .principle strong { display: block; margin-bottom: 8px; }
     .principle p { color: var(--muted); line-height: 1.6; font-size: 15px; }
-
-    .validation-bridge {
-      padding: 18px 20px;
-      border: 1px dashed color-mix(in srgb, var(--orange), var(--line) 28%);
-      border-radius: var(--radius);
-      background: color-mix(in srgb, var(--orange), transparent 94%);
-    }
-
-    .validation-bridge strong {
-      display: block;
-      color: var(--orange);
-      margin-bottom: 7px;
-    }
-
-    .validation-bridge p {
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.58;
-    }
 
     .flywheel-grid {
       display: grid;
@@ -762,33 +845,36 @@
       text-transform: uppercase;
     }
 
-    .state-machine {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 6px;
-      margin: 22px 0;
-    }
-
-    .machine-state {
-      min-height: 74px;
-      padding: 12px 9px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      border: 1px solid var(--line);
-      border-radius: 6px;
-      background: rgba(255,255,255,.06);
-    }
-
-    .machine-state small { color: var(--blue); font-size: 10px; font-weight: 760; }
-    .machine-state strong { font-size: 13px; }
-
     .wheel-mantra {
       margin-top: 20px;
       color: var(--muted);
       font-size: 13px;
       font-weight: 680;
     }
+
+    .compound-gains {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin: 24px 0;
+      border-top: 1px solid var(--line);
+      border-left: 1px solid var(--line);
+    }
+
+    .compound-gain {
+      min-height: 96px;
+      padding: 16px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .compound-gain small {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      margin-bottom: 18px;
+    }
+
+    .compound-gain strong { font-size: 18px; }
 
     .signal-note {
       margin-top: 20px;
@@ -943,6 +1029,16 @@
       font-weight: 720;
     }
 
+    .case-label small {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 780;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
     .case-text {
       color: var(--muted);
       font-size: 13px;
@@ -962,6 +1058,14 @@
       flex-wrap: wrap;
       gap: 8px;
       margin-top: 18px;
+    }
+
+    .project-links-label {
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 780;
+      letter-spacing: .08em;
+      text-transform: uppercase;
     }
 
     .links a {
@@ -1018,6 +1122,16 @@
       font-weight: 650;
     }
 
+    .entry-meta {
+      display: inline-block;
+      margin-left: 10px;
+      color: var(--blue);
+      font-size: 11px;
+      font-weight: 760;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
     .entry h3 {
       font-size: 22px;
       margin: 8px 0;
@@ -1028,91 +1142,95 @@
       line-height: 1.62;
     }
 
-    .about-grid {
+    .market-section { padding-top: 72px; }
+    .market-section h2 { font-size: clamp(30px, 4vw, 52px); }
+
+    .market-panel {
       display: grid;
       grid-template-columns: .9fr 1.1fr;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .market-copy {
+      padding: 30px;
+      border-right: 1px solid var(--line);
+    }
+
+    .market-copy h3 {
+      max-width: 460px;
+      margin-bottom: 20px;
+      font-size: clamp(28px, 3.4vw, 44px);
+      line-height: 1.02;
+    }
+
+    .market-copy p {
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .market-signals {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .market-signal {
+      min-height: 148px;
+      padding: 24px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .market-signal:nth-child(2n) { border-right: 0; }
+    .market-signal:nth-last-child(-n + 2) { border-bottom: 0; }
+    .market-signal small { color: var(--orange); font-weight: 780; }
+    .market-signal strong { display: block; margin: 28px 0 7px; font-size: 18px; }
+    .market-signal span { color: var(--muted); font-size: 13px; line-height: 1.45; }
+
+    .principles-grid {
+      display: grid;
+      grid-template-columns: .72fr 1.28fr;
       gap: 28px;
       align-items: stretch;
     }
 
-    .portrait {
-      padding: 24px;
+    .principles-intro {
       min-height: 520px;
-      display: grid;
-      align-content: space-between;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .portrait::after {
-      content: "";
-      position: absolute;
-      inset: auto -20% -28% 18%;
-      height: 72%;
-      background: conic-gradient(from 120deg, var(--blue), var(--cyan), var(--green), var(--yellow), var(--pink), var(--blue));
-      filter: blur(38px);
-      opacity: .34;
-      border-radius: 50%;
-    }
-
-    .portrait h3 {
-      position: relative;
-      z-index: 1;
-      font-size: clamp(34px, 4vw, 58px);
-      line-height: 1;
-      letter-spacing: 0;
-    }
-
-    .values {
-      position: relative;
-      z-index: 1;
-      display: grid;
-      gap: 10px;
-    }
-
-    .value {
+      padding: 28px;
       display: flex;
+      flex-direction: column;
       justify-content: space-between;
-      gap: 18px;
-      padding: 14px 0;
-      border-top: 1px solid var(--line);
+    }
+
+    .principles-intro h3 {
+      font-size: clamp(35px, 4.8vw, 64px);
+      line-height: .98;
+    }
+
+    .principles-intro p {
       color: var(--muted);
+      font-size: 16px;
+      line-height: 1.7;
     }
 
-    .value strong { color: var(--ink); }
-
-    .story {
-      padding: 30px;
-    }
-
-    .story p {
-      color: var(--muted);
-      font-size: 17px;
-      line-height: 1.8;
-      margin-bottom: 18px;
-    }
-
-    .mini-timeline {
+    .manual-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      margin-top: 30px;
-    }
-
-    .mini-timeline div {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       border-top: 1px solid var(--line);
-      padding-top: 12px;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.45;
+      border-left: 1px solid var(--line);
     }
 
-    .mini-timeline strong {
-      color: var(--ink);
-      display: block;
-      margin-bottom: 6px;
-      font-size: 15px;
+    .manual-rule {
+      min-height: 168px;
+      padding: 22px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
     }
+
+    .manual-rule small { color: var(--blue); font-size: 11px; font-weight: 780; }
+    .manual-rule strong { display: block; margin: 28px 0 8px; font-size: 18px; }
+    .manual-rule span { color: var(--muted); font-size: 13px; line-height: 1.5; }
 
     footer {
       width: min(var(--max), calc(100% - 32px));
@@ -1152,7 +1270,8 @@
       .section-head,
       .pyramid-wrap,
       .flywheel-grid,
-      .about-grid {
+      .market-panel,
+      .principles-grid {
         grid-template-columns: 1fr;
       }
       #flow .section-head { grid-template-columns: 1fr; }
@@ -1160,6 +1279,10 @@
       .reuse-pipeline { grid-template-columns: 1fr; }
       .pipeline-arrow { transform: rotate(90deg); }
       .project-card { grid-template-columns: 1fr; }
+      .market-copy {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
       .project-overview {
         min-height: 280px;
         border-right: 0;
@@ -1186,8 +1309,13 @@
       .now-grid { grid-template-columns: 1fr; }
       .now-field.wide { grid-column: auto; }
       .now-field.left { border-right: 0; }
-      .stage-switch,
-      .state-machine { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .stage-switch { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .core-loop-track { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .loop-state { min-height: 188px; }
+      .loop-state:nth-child(2) { border-right: 0; }
+      .loop-state:nth-child(-n + 2) { border-bottom: 1px solid var(--line); }
+      .loop-state:nth-child(2)::after { content: "↓"; right: 18px; }
+      .core-loop-foot { flex-direction: column; gap: 6px; }
       .pyramid { min-height: 520px; padding: 16px; }
       .pyramid-layer {
         width: 100%;
@@ -1205,7 +1333,13 @@
         border-bottom: 1px solid var(--line);
       }
       .reuse-step:last-child { border-bottom: 0; }
-      .outlet-grid, .mini-timeline { grid-template-columns: 1fr; }
+      .outlet-grid { grid-template-columns: 1fr; }
+      .market-signals, .manual-grid { grid-template-columns: 1fr; }
+      .principles-intro { min-height: 340px; }
+      .market-signal,
+      .market-signal:nth-child(2n),
+      .market-signal:nth-last-child(-n + 2) { border-right: 0; border-bottom: 1px solid var(--line); }
+      .market-signal:last-child { border-bottom: 0; }
       .project-overview, .case-story { padding: 22px; }
       .case-row { grid-template-columns: 1fr; gap: 5px; }
       footer { flex-direction: column; }
@@ -1225,12 +1359,12 @@
       </a>
       <div class="nav-links" aria-label="Page navigation">
         <a href="#now">NOW</a>
+        <a href="#core-loop">循环</a>
         <a href="#pyramid">资产</a>
         <a href="#flywheel">飞轮</a>
-        <a href="#flow">流程</a>
         <a href="#projects">能力账本</a>
-        <a href="#thinking">思考</a>
-        <a href="#about">关于我</a>
+        <a href="#growth-log">成长日志</a>
+        <a href="#principles">原则</a>
       </div>
     </div>
   </nav>
@@ -1241,23 +1375,24 @@
         <div class="reveal">
           <p class="eyebrow">AI 时代知识工作者的成长操作系统</p>
           <h1>Build Once <span class="gradient-text">Compound Forever</span></h1>
-          <p class="hero-definition">把每一次 AI 实践，沉淀成作品、内容、信任和长期职业资产。</p>
+          <p class="hero-definition">把每一次真实实践，沉淀成能力、作品、内容和长期信任。</p>
           <div class="hero-principle">
-            <strong>不要为了输出而输出。</strong>
-            <p>从真实问题出发，做出东西，留下证据，记录思考，让每一次投入进入下一轮。</p>
+            <strong>为自己而建，公开地成长。</strong>
+            <p>不要为了输出而输出。从真实问题出发，做出东西，留下证据，记录思考，让每一次投入进入下一轮。</p>
           </div>
         </div>
-        <aside class="hero-panel reveal" aria-label="Knowledge OS system map">
+        <aside class="hero-panel reveal" aria-label="Knowledge OS weekly questions">
           <div class="system-map">
-            <div class="map-cell"><small>01</small><strong>Observe</strong><span>发现值得解决的真实问题</span></div>
-            <div class="map-cell"><small>02</small><strong>Build</strong><span>做出一个可运行的东西</span></div>
-            <div class="map-cell"><small>03</small><strong>Reflect</strong><span>说清选择、卡点和结果</span></div>
-            <div class="map-cell"><small>04</small><strong>Publish</strong><span>公开证据，让反馈回来</span></div>
+            <div class="map-cell"><small>01 · Problem</small><strong>我在解决什么？</strong><span>找到一个真实、具体、值得投入的问题。</span></div>
+            <div class="map-cell"><small>02 · Action</small><strong>我正在做什么？</strong><span>把注意力放在当前项目，不同时开新坑。</span></div>
+            <div class="map-cell"><small>03 · Learning</small><strong>我学到了什么？</strong><span>记录判断、弯路和能力变化。</span></div>
+            <div class="map-cell"><small>04 · Assets</small><strong>我留下了什么？</strong><span>让方法、代码、内容和证据可以再次调用。</span></div>
+            <div class="map-cell wide"><small>05 · Next</small><strong>下一步最重要的事情是什么？</strong><span>每周只保留一个能让当前循环往前走的动作。</span></div>
           </div>
           <div class="panel-foot">
-            <span>Personal OS</span>
-            <span>Public by Default</span>
-            <span>Long-term Loop</span>
+            <span>Built for myself</span>
+            <span>Growing in public</span>
+            <span>Reviewed weekly</span>
           </div>
         </aside>
       </div>
@@ -1278,15 +1413,15 @@
         </div>
         <div class="now-grid">
           <div class="now-field wide">
-            <span class="now-label">当前问题</span>
+            <span class="now-label">当前问题 · Problem</span>
             <p class="now-value" contenteditable="true" role="textbox" aria-label="当前问题" data-now-key="problem">怎样让 Knowledge OS 真正推动行动，而不是只展示成果？</p>
           </div>
           <div class="now-field left">
-            <span class="now-label">正在构建</span>
+            <span class="now-label">当前项目 · Building</span>
             <p class="now-value" contenteditable="true" role="textbox" aria-label="正在构建" data-now-key="building">一个先服务自己、同时允许别人看见成长过程的 Personal Operating System。</p>
           </div>
           <div class="now-field">
-            <span class="now-label">当前阶段</span>
+            <span class="now-label">当前阶段 · Stage</span>
             <div class="stage-switch" aria-label="当前阶段">
               <button class="stage-button" type="button" data-stage="Observe" aria-pressed="false">Observe</button>
               <button class="stage-button is-active" type="button" data-stage="Build" aria-pressed="true">Build</button>
@@ -1295,13 +1430,43 @@
             </div>
           </div>
           <div class="now-field left">
-            <span class="now-label">本周下一步</span>
+            <span class="now-label">下一步 · Next</span>
             <p class="now-value" contenteditable="true" role="textbox" aria-label="本周下一步" data-now-key="next">用这套系统推动一个真实项目进入下一个状态。</p>
           </div>
           <div class="now-field pause">
-            <span class="now-label">暂时不做</span>
+            <span class="now-label">暂时不做 · Not now</span>
             <p class="now-value" contenteditable="true" role="textbox" aria-label="暂时不做" data-now-key="not-doing">不开新项目，也不为每个想法立刻寻找变现路径。</p>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section core-loop-section" id="core-loop">
+      <div class="section-head reveal">
+        <div>
+          <p class="kicker">Chapter 01 · Core Loop</p>
+          <h2>四个动作，推动一切</h2>
+        </div>
+        <p class="lead">复杂飞轮负责解释长期系统，这四个动作负责当下执行。每次打开 Knowledge OS，先判断自己现在处于哪个阶段。</p>
+      </div>
+      <div class="core-loop-board glass-panel reveal">
+        <div class="core-loop-track" aria-label="Observe Build Reflect Publish core loop">
+          <button class="loop-state" type="button" data-stage="Observe" aria-pressed="false">
+            <span class="loop-index">01</span><strong>Observe</strong><em>发现</em><span class="loop-question">我真正看见了什么问题？</span>
+          </button>
+          <button class="loop-state is-active" type="button" data-stage="Build" aria-pressed="true">
+            <span class="loop-index">02</span><strong>Build</strong><em>构建</em><span class="loop-question">今天能做出哪一个可验证的东西？</span>
+          </button>
+          <button class="loop-state" type="button" data-stage="Reflect" aria-pressed="false">
+            <span class="loop-index">03</span><strong>Reflect</strong><em>复盘</em><span class="loop-question">哪个判断对了，哪条弯路值得记住？</span>
+          </button>
+          <button class="loop-state" type="button" data-stage="Publish" aria-pressed="false">
+            <span class="loop-index">04</span><strong>Publish</strong><em>发布</em><span class="loop-question">哪些证据值得公开，让反馈回来？</span>
+          </button>
+        </div>
+        <div class="core-loop-foot">
+          <span><strong>当前状态</strong> 与 NOW 自动同步</span>
+          <span>Observe → Build → Reflect → Publish → Observe</span>
         </div>
       </div>
     </section>
@@ -1309,42 +1474,41 @@
     <section class="section" id="pyramid">
       <div class="section-head reveal">
         <div>
-          <p class="kicker">Chapter 01</p>
+          <p class="kicker">Chapter 02 · Knowledge Assets</p>
           <h2>知识资产金字塔</h2>
         </div>
-        <p class="lead">四类资产层层产生：能力做出项目，项目留下证据，内容让证据被看见，持续输出最终形成信任。</p>
+        <p class="lead">只有四类资产会长期复利：真正掌握的能力、真正做出的东西、沉淀下来的经验，以及逐渐形成的信任。</p>
       </div>
 
       <div class="pyramid-wrap">
         <div class="pyramid glass-panel reveal" aria-label="Knowledge asset pyramid">
           <div class="pyramid-layer" tabindex="0">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 1 16 0 8 8 0 0 1-16 0z"/><path d="M8 12h8M12 8v8"/></svg>
-            <div><strong>信任资产</strong><span>持续输出被反复验证，形成可依赖的专业判断。</span></div>
+            <div><strong>信任资产 · Trust</strong><span>别人为什么开始相信我的判断？</span></div>
             <div class="tooltip">内容持续出现，判断经得起检验，别人才能从“看过你”走向“愿意相信你”。</div>
           </div>
           <div class="pyramid-layer" tabindex="0">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14v16H5z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
-            <div><strong>内容资产</strong><span>作品被解释和拆分，开始被更多人看见。</span></div>
+            <div><strong>内容资产 · Content</strong><span>我把哪些经验表达和沉淀下来了？</span></div>
             <div class="tooltip">内容不是额外选题，而是把项目里的取舍、失败、结果和方法讲清楚。</div>
           </div>
           <div class="pyramid-layer" tabindex="0">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16v11H4z"/><path d="M8 7V5h8v2M8 13h8"/></svg>
-            <div><strong>作品资产</strong><span>真实项目成为可展示、可调用的能力证据。</span></div>
+            <div><strong>作品资产 · Work</strong><span>我真正做出了什么？</span></div>
             <div class="tooltip">能力只有进入真实项目，才会留下 GitHub、产品、过程记录和结果证据。</div>
           </div>
           <div class="pyramid-layer" tabindex="0">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M5 8h14M7 16h10"/><path d="M4 20h16"/></svg>
-            <div><strong>能力资产</strong><span>问题定义、设计、工程、表达和判断力持续积累。</span></div>
+            <div><strong>能力资产 · Capability</strong><span>我真正掌握了什么？</span></div>
             <div class="tooltip">底层能力不靠课程数量证明，而靠能否把模糊问题变成一个可运行的项目。</div>
           </div>
         </div>
 
         <div class="principles reveal">
-          <div class="principle glass-panel"><b>01</b><div><strong>能力 → 真实项目</strong><p>把每次学习落到一个真实问题上，能力才会从“知道”变成“做得到”。</p></div></div>
-          <div class="principle glass-panel"><b>02</b><div><strong>项目 → 可展示证据</strong><p>代码、产品、决策过程和最终结果，共同证明你解决过什么。</p></div></div>
-          <div class="principle glass-panel"><b>03</b><div><strong>作品 → 内容素材</strong><p>解释为什么做、如何做、踩过什么坑，一个项目自然长出多种内容。</p></div></div>
-          <div class="principle glass-panel"><b>04</b><div><strong>持续输出 → 信任</strong><p>当判断和结果被稳定看见，关注才会逐渐变成可信度。</p></div></div>
-          <div class="validation-bridge"><strong>商业不是第五层资产。</strong><p>它是前四层资产接受市场检验后的结果。偶尔问市场一句：“有人愿意为这个付钱吗？”有，就是信号；没有，就回来继续做。</p></div>
+          <div class="principle glass-panel"><b>01</b><div><strong>能力 → 真实项目</strong><p>把学习放进真实问题，能力才会从“知道”变成“做得到”。</p></div></div>
+          <div class="principle glass-panel"><b>02</b><div><strong>项目 → 可验证证据</strong><p>代码、产品、决策过程和结果，共同回答我真正做出了什么。</p></div></div>
+          <div class="principle glass-panel"><b>03</b><div><strong>证据 → 经验沉淀</strong><p>解释为什么做、如何做、哪里走弯了，让一次经验可以被再次调用。</p></div></div>
+          <div class="principle glass-panel"><b>04</b><div><strong>持续验证 → 长期信任</strong><p>判断和结果持续经得起检验，信任才会成为真正的长期资产。</p></div></div>
         </div>
       </div>
     </section>
@@ -1352,7 +1516,7 @@
     <section class="section" id="flywheel">
       <div class="section-head reveal">
         <div>
-          <p class="kicker">Chapter 02</p>
+          <p class="kicker">Chapter 03 · Growth Flywheel</p>
           <h2>成长飞轮</h2>
         </div>
         <p class="lead">完整的 11 个节点已融入同一条上升轨道；每天真正执行时，只需要判断自己处在 Observe、Build、Reflect、Publish 哪个状态。</p>
@@ -1463,7 +1627,7 @@
             </g>
             <g class="helix-stage validation" transform="translate(310 153)">
               <circle class="stage-orb" r="19"/><text class="stage-number" y="1">09</text>
-              <g class="stage-chip" transform="translate(27 -18)"><rect width="160" height="36" rx="7"/><text x="14" y="19">需求 / 付费验证</text></g>
+              <g class="stage-chip" transform="translate(27 -18)"><rect width="116" height="36" rx="7"/><text x="14" y="19">市场验证</text></g>
             </g>
             <g class="helix-stage" transform="translate(445 105)">
               <circle class="stage-orb" r="17"/><text class="stage-number" y="1">10</text>
@@ -1476,17 +1640,16 @@
           </svg>
         </div>
         <div class="wheel-copy glass-panel reveal">
-          <p class="execution-label">Daily state machine</p>
-          <p class="statement">只记住四个状态。</p>
-          <div class="state-machine" aria-label="Daily execution states">
-            <div class="machine-state"><small>01</small><strong>Observe</strong></div>
-            <div class="machine-state"><small>02</small><strong>Build</strong></div>
-            <div class="machine-state"><small>03</small><strong>Reflect</strong></div>
-            <div class="machine-state"><small>04</small><strong>Publish</strong></div>
+          <p class="execution-label">Upward spiral</p>
+          <p class="statement">每一轮，都站得更高。</p>
+          <div class="compound-gains" aria-label="Assets accumulated after each loop">
+            <div class="compound-gain"><small>CAPABILITY</small><strong>能力更多</strong></div>
+            <div class="compound-gain"><small>WORK</small><strong>作品更多</strong></div>
+            <div class="compound-gain"><small>CONTENT</small><strong>内容更多</strong></div>
+            <div class="compound-gain"><small>TRUST</small><strong>信任更多</strong></div>
           </div>
-          <p class="lead">以后做任何事情，只问自己：我是在发现问题、动手做、复盘，还是发布？四个状态负责今天，完整飞轮负责长期。</p>
-          <p class="wheel-mantra">Content is By-product of Projects.</p>
-          <p class="signal-note"><strong>一个 49 元订单也是重要信号。</strong> 它证明专业判断开始具备真实交换价值，并为下一轮项目提供方向。</p>
+          <p class="lead">新问题不是把我送回原点。它带着上一轮留下的能力、证据、经验和信任，成为下一轮的起点。</p>
+          <p class="wheel-mantra">A new loop starts with everything the last one left behind.</p>
         </div>
       </div>
     </section>
@@ -1494,10 +1657,10 @@
     <section class="section" id="flow">
       <div class="section-head reveal">
         <div>
-          <p class="kicker">Chapter 03</p>
+          <p class="kicker">Chapter 04 · Create Once</p>
           <h2>单一来源，多出口</h2>
         </div>
-        <p class="lead">Create Once Publish Everywhere。十年的公众号、今天的 GitHub、未来的小红书和咨询产品，都从同一个真实项目生长出来。</p>
+        <p class="lead">Create once. Reflect once. Compound everywhere. Content is a by-product of real work.</p>
       </div>
       <p class="reuse-manifesto reveal">做一次，记录一次，<span>复用很多次。</span></p>
       <div class="reuse-pipeline glass-panel reveal">
@@ -1512,7 +1675,7 @@
           <div class="outlet">小红书</div>
           <div class="outlet">Knowledge OS</div>
           <div class="outlet">GitHub</div>
-          <div class="outlet">未来咨询产品</div>
+          <div class="outlet">长期复利</div>
         </div>
       </div>
     </section>
@@ -1520,115 +1683,129 @@
     <section class="section" id="projects">
       <div class="section-head reveal">
         <div>
-          <p class="kicker">Chapter 04</p>
+          <p class="kicker">Chapter 05 · Capability Ledger</p>
           <h2>项目能力账本</h2>
         </div>
-        <p class="lead">每个项目既是可验证的案例，也是能力增长记录：做完了什么、学会了什么，以及留下了哪些可以再次调用的资产。</p>
+        <p class="lead">这里记录的不只是做过哪些项目，而是每个项目让我新增了什么能力，最终留下了哪些可以再次调用的资产。</p>
       </div>
       <div class="project-grid reveal">
         <article class="project-card glass-panel">
           <div class="project-overview">
             <div><span class="project-type">Learning System</span><h3>小程序开发学习文档</h3><p class="project-summary">把一次真实的小程序开发过程，整理成可公开学习、持续更新的章节式文档。</p></div>
-            <div class="links"><a href="https://github.com/yehloo-ai/college-of-design" target="_blank" rel="noopener">GitHub</a><a href="https://yehloo-ai.github.io/college-of-design/slide/" target="_blank" rel="noopener">产品</a><a href="#thinking">相关内容</a></div>
+            <div class="project-links-block"><span class="project-links-label">09 · Links</span><div class="links"><a href="https://github.com/yehloo-ai/college-of-design" target="_blank" rel="noopener">GitHub</a><a href="https://yehloo-ai.github.io/college-of-design/slide/" target="_blank" rel="noopener">Demo</a><a href="#growth-log">Growth Log</a></div></div>
           </div>
           <div class="case-story">
-            <div class="case-row"><span class="case-label">问题</span><span class="case-text">开发工具、平台配置、真机验证和发布知识彼此割裂，新手很难建立完整路径。</span></div>
-            <div class="case-row"><span class="case-label">为什么做</span><span class="case-text">把自己走过的路变成下一次可直接复用的学习系统。</span></div>
-            <div class="case-row"><span class="case-label">我怎么做</span><span class="case-text">按真实开发阶段组织章节，保留工具截图、关键判断和可访问演示。</span></div>
-            <div class="case-row pitfall"><span class="case-label">踩过什么坑</span><span class="case-text">模拟器可运行不等于真机可用，更不等于已经审核或正式发布。</span></div>
-            <div class="case-row"><span class="case-label">最终结果</span><span class="case-text">一套与代码仓库共存、可通过 GitHub Pages 阅读的学习文档。</span></div>
-            <div class="case-row capability"><span class="case-label">新增能力</span><span class="case-text">微信小程序开发 / 发布 / 审核流程 / AI 辅助开发。</span></div>
-            <div class="case-row asset"><span class="case-label">可复用资产</span><span class="case-text">GitHub Repo ×1、学习文档 ×1、小红书 ×3、公众号 ×1、发布 Checklist ×1。</span></div>
-            <div class="case-row"><span class="case-label">我的复盘</span><span class="case-text">平台能力和发布状态必须基于真实配置与设备证据表达。</span></div>
-            <div class="case-row"><span class="case-label">产生的内容</span><span class="case-text">开发教程、工具清单、发布检查表和失败记录。</span></div>
+            <div class="case-row"><span class="case-label"><small>01 · Problem</small>问题</span><span class="case-text">开发工具、平台配置、真机验证和发布知识彼此割裂，新手很难建立完整路径。</span></div>
+            <div class="case-row"><span class="case-label"><small>02 · Why</small>为什么值得做</span><span class="case-text">把自己走过的路变成下一次可直接复用的学习系统。</span></div>
+            <div class="case-row"><span class="case-label"><small>03 · Build</small>怎么做</span><span class="case-text">按真实开发阶段组织章节，保留工具截图、关键判断和可访问演示。</span></div>
+            <div class="case-row pitfall"><span class="case-label"><small>04 · Detours</small>弯路与误判</span><span class="case-text">模拟器可运行不等于真机可用，更不等于已经审核或正式发布。</span></div>
+            <div class="case-row"><span class="case-label"><small>05 · Result</small>结果</span><span class="case-text">一套与代码仓库共存、可通过 GitHub Pages 阅读的学习文档。</span></div>
+            <div class="case-row"><span class="case-label"><small>06 · Reflection</small>复盘</span><span class="case-text">平台能力和发布状态必须基于真实配置与设备证据表达。</span></div>
+            <div class="case-row capability"><span class="case-label"><small>07 · New Capability</small>新增能力</span><span class="case-text">微信小程序开发 / 发布 / 审核流程 / AI 辅助开发。</span></div>
+            <div class="case-row asset"><span class="case-label"><small>08 · Assets Created</small>留下的资产</span><span class="case-text">GitHub Repo ×1、学习文档 ×1、小红书 ×3、公众号文章 ×1、发布 Checklist ×1。</span></div>
           </div>
         </article>
         <article class="project-card glass-panel">
           <div class="project-overview">
             <div><span class="project-type">Information Product</span><h3>AI 资讯站</h3><p class="project-summary">把分散的 AI 新闻、模型、融资与工具信息，变成可追踪和交叉浏览的每日情报站。</p></div>
-            <div class="links"><a href="https://github.com/yehloo-ai/ai-news-station" target="_blank" rel="noopener">GitHub</a><a href="https://yehloo-ai.github.io/ai-news-station/" target="_blank" rel="noopener">产品</a><a href="#thinking">相关内容</a></div>
+            <div class="project-links-block"><span class="project-links-label">09 · Links</span><div class="links"><a href="https://github.com/yehloo-ai/ai-news-station" target="_blank" rel="noopener">GitHub</a><a href="https://yehloo-ai.github.io/ai-news-station/" target="_blank" rel="noopener">Demo</a><a href="#growth-log">Growth Log</a></div></div>
           </div>
           <div class="case-story">
-            <div class="case-row"><span class="case-label">问题</span><span class="case-text">AI 信息更新太快、来源太散，看过之后难以比较，也无法形成长期线索。</span></div>
-            <div class="case-row"><span class="case-label">为什么做</span><span class="case-text">建立一个每天能回访、长期能累积的个人信息入口。</span></div>
-            <div class="case-row"><span class="case-label">我怎么做</span><span class="case-text">把每日摘要、模型与融资时间线、工具目录和交叉筛选放进同一页面。</span></div>
-            <div class="case-row pitfall"><span class="case-label">踩过什么坑</span><span class="case-text">跨域代理和外部数据源会失效；页面能打开，不代表数据链路可靠。</span></div>
-            <div class="case-row"><span class="case-label">最终结果</span><span class="case-text">一个持续更新、可公开访问的 AI news hub。</span></div>
-            <div class="case-row capability"><span class="case-label">新增能力</span><span class="case-text">信息源评估 / 数据建模 / 跨域排错 / 静态站发布 / 内容产品 IA。</span></div>
-            <div class="case-row asset"><span class="case-label">可复用资产</span><span class="case-text">GitHub Repo ×1、公开站点 ×1、每日摘要模板 ×1、模型与融资时间线 ×2、数据源检查表 ×1。</span></div>
-            <div class="case-row"><span class="case-label">我的复盘</span><span class="case-text">资讯产品的核心不是数量，而是来源稳定、时间清楚和筛选有用。</span></div>
-            <div class="case-row"><span class="case-label">产生的内容</span><span class="case-text">每日摘要、模型观察、工具对比和构建日志。</span></div>
+            <div class="case-row"><span class="case-label"><small>01 · Problem</small>问题</span><span class="case-text">AI 信息更新太快、来源太散，看过之后难以比较，也无法形成长期线索。</span></div>
+            <div class="case-row"><span class="case-label"><small>02 · Why</small>为什么值得做</span><span class="case-text">建立一个每天能回访、长期能累积的个人信息入口。</span></div>
+            <div class="case-row"><span class="case-label"><small>03 · Build</small>怎么做</span><span class="case-text">把每日摘要、模型与融资时间线、工具目录和交叉筛选放进同一页面。</span></div>
+            <div class="case-row pitfall"><span class="case-label"><small>04 · Detours</small>弯路与误判</span><span class="case-text">跨域代理和外部数据源会失效；页面能打开，不代表数据链路可靠。</span></div>
+            <div class="case-row"><span class="case-label"><small>05 · Result</small>结果</span><span class="case-text">一个持续更新、可公开访问的 AI news hub。</span></div>
+            <div class="case-row"><span class="case-label"><small>06 · Reflection</small>复盘</span><span class="case-text">资讯产品的核心不是数量，而是来源稳定、时间清楚和筛选有用。</span></div>
+            <div class="case-row capability"><span class="case-label"><small>07 · New Capability</small>新增能力</span><span class="case-text">信息源评估 / 数据建模 / 跨域排错 / 静态站发布 / 内容产品 IA。</span></div>
+            <div class="case-row asset"><span class="case-label"><small>08 · Assets Created</small>留下的资产</span><span class="case-text">GitHub Repo ×1、公开站点 ×1、每日摘要模板 ×1、模型与融资时间线 ×2、数据源检查表 ×1、构建日志 ×1。</span></div>
           </div>
         </article>
         <article class="project-card glass-panel">
           <div class="project-overview">
             <div><span class="project-type">AI Workflow</span><h3>灵感探针</h3><p class="project-summary">把模糊的产品创意转成可检索、可核验的专利可行性工作流。</p></div>
-            <div class="links"><a href="https://github.com/yehloo-ai/lingan-tanzhen" target="_blank" rel="noopener">GitHub</a><a href="https://yehloo-ai.github.io/lingan-tanzhen/" target="_blank" rel="noopener">产品</a><a href="#thinking">相关内容</a></div>
+            <div class="project-links-block"><span class="project-links-label">09 · Links</span><div class="links"><a href="https://github.com/yehloo-ai/lingan-tanzhen" target="_blank" rel="noopener">GitHub</a><a href="https://yehloo-ai.github.io/lingan-tanzhen/" target="_blank" rel="noopener">Demo</a><a href="#growth-log">Growth Log</a></div></div>
           </div>
           <div class="case-story">
-            <div class="case-row"><span class="case-label">问题</span><span class="case-text">一个产品想法是否已有相似专利，普通人很难从模糊描述进入有效检索。</span></div>
-            <div class="case-row"><span class="case-label">为什么做</span><span class="case-text">让早期创意先经过证据筛查，再决定是否继续投入。</span></div>
-            <div class="case-row"><span class="case-label">我怎么做</span><span class="case-text">把想法拆成关键特征、检索词、证据结果和结论边界，并保留本地 FastAPI 流程。</span></div>
-            <div class="case-row pitfall"><span class="case-label">踩过什么坑</span><span class="case-text">命中数量不是结论；同义表达、误报和法律判断边界都必须单独处理。</span></div>
-            <div class="case-row"><span class="case-label">最终结果</span><span class="case-text">一个可托管演示、也可在本地运行的专利可行性检索工具。</span></div>
-            <div class="case-row capability"><span class="case-label">新增能力</span><span class="case-text">问题拆解 / 专利检索词设计 / 证据边界判断 / FastAPI 原型 / 托管演示。</span></div>
-            <div class="case-row asset"><span class="case-label">可复用资产</span><span class="case-text">GitHub Repo ×1、产品演示 ×1、检索模板 ×1、关键词方法 ×1、误报案例库 ×1。</span></div>
-            <div class="case-row"><span class="case-label">我的复盘</span><span class="case-text">AI 适合缩小证据范围，但不能替代专业法律结论。</span></div>
-            <div class="case-row"><span class="case-label">产生的内容</span><span class="case-text">检索策略、关键词拆解、误报案例和产品验证方法。</span></div>
+            <div class="case-row"><span class="case-label"><small>01 · Problem</small>问题</span><span class="case-text">一个产品想法是否已有相似专利，普通人很难从模糊描述进入有效检索。</span></div>
+            <div class="case-row"><span class="case-label"><small>02 · Why</small>为什么值得做</span><span class="case-text">让早期创意先经过证据筛查，再决定是否继续投入。</span></div>
+            <div class="case-row"><span class="case-label"><small>03 · Build</small>怎么做</span><span class="case-text">把想法拆成关键特征、检索词、证据结果和结论边界，并保留本地 FastAPI 流程。</span></div>
+            <div class="case-row pitfall"><span class="case-label"><small>04 · Detours</small>弯路与误判</span><span class="case-text">命中数量不是结论；同义表达、误报和法律判断边界都必须单独处理。</span></div>
+            <div class="case-row"><span class="case-label"><small>05 · Result</small>结果</span><span class="case-text">一个可托管演示、也可在本地运行的专利可行性检索工具。</span></div>
+            <div class="case-row"><span class="case-label"><small>06 · Reflection</small>复盘</span><span class="case-text">AI 适合缩小证据范围，但不能替代专业法律结论。</span></div>
+            <div class="case-row capability"><span class="case-label"><small>07 · New Capability</small>新增能力</span><span class="case-text">问题拆解 / 专利检索词设计 / 证据边界判断 / FastAPI 原型 / 托管演示。</span></div>
+            <div class="case-row asset"><span class="case-label"><small>08 · Assets Created</small>留下的资产</span><span class="case-text">GitHub Repo ×1、产品演示 ×1、检索模板 ×1、关键词方法 ×1、误报案例库 ×1、产品验证方法 ×1。</span></div>
           </div>
         </article>
       </div>
     </section>
 
-    <section class="section" id="thinking">
+    <section class="section" id="growth-log">
       <div class="section-head reveal">
         <div>
-          <p class="kicker">Chapter 05</p>
-          <h2>思考时间轴</h2>
+          <p class="kicker">Chapter 06 · Growth Log</p>
+          <h2>成长日志</h2>
         </div>
-        <p class="lead">公众号和小红书内容自动聚合为持续成长日志：每条内容都回到一个项目、一次复盘或一个真实问题。</p>
+        <p class="lead">它不只记录发布了什么，而是记录项目、失败、关键判断、新发现和能力变化如何真正发生。</p>
       </div>
       <div class="timeline reveal">
-        <article class="entry glass-panel"><time>Week 01</time><h3>从工具使用者到系统构建者</h3><p>记录第一次把 AI 项目、录音复盘和公开发布连接起来的过程。</p></article>
-        <article class="entry glass-panel"><time>Week 02</time><h3>为什么内容应该是项目副产品</h3><p>拆解一篇公众号长文如何来自一次真实项目复盘，而不是单独选题。</p></article>
-        <article class="entry glass-panel"><time>Week 03</time><h3>证据链让真实能力被看见</h3><p>用 GitHub、演示、文章和反思共同证明一个人的问题解决能力。</p></article>
+        <article class="entry glass-panel"><time>Current cycle</time><span class="entry-meta">Direction</span><h3>把 Knowledge OS 从“展示过去”转向“推动当下”</h3><p>加入 NOW 和“暂时不做”，让系统每周先帮我取舍，再记录结果。</p></article>
+        <article class="entry glass-panel"><time>Project update</time><span class="entry-meta">Build</span><h3>小程序学习文档成为可持续维护的章节系统</h3><p>开发、真机验证、审核和发布被放回同一条路径，下一次不必从头试错。</p></article>
+        <article class="entry glass-panel"><time>Detour</time><span class="entry-meta">Failure</span><h3>页面能打开，不代表数据链路可靠</h3><p>AI 资讯站的跨域与外部数据问题，让“可见”和“可用”成为两个必须分开验证的状态。</p></article>
+        <article class="entry glass-panel"><time>Reflection</time><span class="entry-meta">Capability</span><h3>证据边界本身也是一种能力</h3><p>灵感探针让我更清楚：AI 可以帮助缩小范围，但不能替代专业结论。</p></article>
       </div>
     </section>
 
-    <section class="section" id="about">
+    <section class="section market-section" id="market-validation">
       <div class="section-head reveal">
         <div>
-          <p class="kicker">Chapter 06</p>
-          <h2>关于我</h2>
+          <p class="kicker">Chapter 07 · Market Validation</p>
+          <h2>市场验证</h2>
         </div>
-        <p class="lead">这里记录一段持续构建知识资产的叙事：我把每次学习、项目和表达都放回同一个长期系统。</p>
+        <p class="lead">商业不是第五层资产，而是市场对能力、作品、内容和信任的一次反馈。</p>
       </div>
-      <div class="about-grid">
-        <aside class="portrait glass-panel reveal">
-          <h3>持续构建，而不是一次展示。</h3>
-          <div class="values">
-            <div class="value"><strong>价值观</strong><span>真实问题优先</span></div>
-            <div class="value"><strong>方法</strong><span>做中学，做后讲</span></div>
-            <div class="value"><strong>目标</strong><span>让知识资产持续复利</span></div>
-          </div>
+      <div class="market-panel glass-panel reveal">
+        <div class="market-copy">
+          <h3>Revenue is feedback, not the destination.</h3>
+          <p>当有人愿意付费咨询、购买数字产品、使用工具或发起合作，它说明这些知识资产开始产生真实价值。有信号，就记录；没有，就回到真实问题继续构建。</p>
+        </div>
+        <div class="market-signals" aria-label="Market validation signals">
+          <div class="market-signal"><small>01</small><strong>付费咨询</strong><span>有人愿意为专业判断付费。</span></div>
+          <div class="market-signal"><small>02</small><strong>数字产品</strong><span>方法被封装后仍然能够帮助别人。</span></div>
+          <div class="market-signal"><small>03</small><strong>工具使用</strong><span>做出来的东西进入真实使用场景。</span></div>
+          <div class="market-signal"><small>04</small><strong>邀请合作</strong><span>持续公开的判断开始产生协作机会。</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="principles">
+      <div class="section-head reveal">
+        <div>
+          <p class="kicker">Chapter 08 · Principles</p>
+          <h2>我的做事原则</h2>
+        </div>
+        <p class="lead">这是一份 Personal Operating Manual，用来在选择变多、节奏变快时，仍然保持同一套判断顺序。</p>
+      </div>
+      <div class="principles-grid">
+        <aside class="principles-intro glass-panel reveal">
+          <h3>为自己而建，公开地成长。</h3>
+          <p>我把自己看成一个持续构建知识资产的人。Knowledge OS 的核心不是更多产出，而是让每一次学习、项目和表达都不被浪费。</p>
         </aside>
-        <article class="story glass-panel reveal">
-          <p>我把自己看成一个持续构建知识资产的人。AI 不是替我完成表达的捷径，而是让我更快把模糊经验整理成系统，把一次项目变成可复用的方法，把一次复盘变成可以被别人理解和检验的内容。</p>
-          <p>Knowledge OS 的核心不是“更多产出”，而是更少浪费：同一个项目不只停留在本地文件夹，它会进入能力账本、内容库、信任库和下一轮问题库。</p>
-          <div class="mini-timeline">
-            <div><strong>Observe</strong>发现真实问题和重复工作。</div>
-            <div><strong>Build</strong>做出可运行的 AI 项目。</div>
-            <div><strong>Reflect</strong>录音复盘并结构化沉淀。</div>
-            <div><strong>Publish</strong>公开证据，获得反馈，进入下一轮。</div>
-          </div>
-        </article>
+        <div class="manual-grid reveal">
+          <div class="manual-rule"><small>01</small><strong>Start with real problems.</strong><span>从真实问题开始。</span></div>
+          <div class="manual-rule"><small>02</small><strong>Build before explaining.</strong><span>先做出来，再解释。</span></div>
+          <div class="manual-rule"><small>03</small><strong>Document the detours.</strong><span>记录弯路，而不只记录结果。</span></div>
+          <div class="manual-rule"><small>04</small><strong>Create once, compound repeatedly.</strong><span>一次实践，多次复用。</span></div>
+          <div class="manual-rule"><small>05</small><strong>Revenue is feedback.</strong><span>收入是反馈，不是终点。</span></div>
+          <div class="manual-rule"><small>06</small><strong>Build for myself. Grow in public.</strong><span>为自己而建，公开地成长。</span></div>
+        </div>
       </div>
     </section>
   </main>
 
   <footer>
     <span>Knowledge OS</span>
-    <span>Build Once, Compound Forever</span>
+    <span>Built for myself. Growing in public.</span>
   </footer>
 
   <script>

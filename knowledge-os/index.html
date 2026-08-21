@@ -167,6 +167,8 @@
       padding: 96px 0;
     }
 
+    .section[id] { scroll-margin-top: calc(var(--nav-h) + 20px); }
+
     .hero {
       min-height: calc(100vh - var(--nav-h));
       display: grid;
@@ -208,12 +210,21 @@
       background-clip: text;
     }
 
-    .hero-copy {
-      margin-top: 28px;
+    .hero-definition {
+      margin-top: 30px;
       max-width: 660px;
+      color: var(--ink);
+      font-size: clamp(21px, 2.2vw, 29px);
+      font-weight: 650;
+      line-height: 1.42;
+    }
+
+    .hero-note {
+      margin-top: 14px;
+      max-width: 620px;
       color: var(--muted);
-      font-size: clamp(18px, 2vw, 24px);
-      line-height: 1.5;
+      font-size: 15px;
+      line-height: 1.65;
     }
 
     .hero-panel, .glass-panel {
@@ -311,14 +322,14 @@
 
     .pyramid-wrap {
       display: grid;
-      grid-template-columns: minmax(320px, .9fr) 1fr;
+      grid-template-columns: minmax(320px, .88fr) 1.12fr;
       gap: 28px;
       align-items: center;
     }
 
     .pyramid {
       padding: 26px;
-      min-height: 580px;
+      min-height: 520px;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
@@ -345,16 +356,21 @@
       cursor: default;
     }
 
-    .pyramid-layer:nth-child(1) { --w: 42%; --c1: #7c5cff; --c2: #4b8dff; }
-    .pyramid-layer:nth-child(2) { --w: 56%; --c1: #ff375f; --c2: #ff8a3d; }
-    .pyramid-layer:nth-child(3) { --w: 70%; --c1: #ffcc00; --c2: #ff8a3d; }
-    .pyramid-layer:nth-child(4) { --w: 84%; --c1: #32d6c4; --c2: #34c759; }
-    .pyramid-layer:nth-child(5) { --w: 98%; --c1: #007aff; --c2: #32d6c4; }
+    .pyramid-layer:nth-child(1) { --w: 50%; --c1: #7c5cff; --c2: #4b8dff; }
+    .pyramid-layer:nth-child(2) { --w: 66%; --c1: #ff375f; --c2: #ff8a3d; }
+    .pyramid-layer:nth-child(3) { --w: 82%; --c1: #ffcc00; --c2: #ff8a3d; }
+    .pyramid-layer:nth-child(4) { --w: 98%; --c1: #007aff; --c2: #32d6c4; }
 
     .pyramid-layer:hover {
       transform: scale(1.035) translateY(-3px);
       filter: saturate(1.08);
       z-index: 2;
+    }
+
+    .pyramid-layer:focus,
+    .pyramid-layer:focus-visible {
+      outline: 3px solid color-mix(in srgb, var(--blue), transparent 42%);
+      outline-offset: 3px;
     }
 
     .pyramid-layer svg {
@@ -388,7 +404,9 @@
       transition: opacity .25s ease, transform .25s ease;
     }
 
-    .pyramid-layer:hover .tooltip {
+    .pyramid-layer:hover .tooltip,
+    .pyramid-layer:focus .tooltip,
+    .pyramid-layer:focus-visible .tooltip {
       opacity: 1;
       transform: translateY(-50%) translateX(0);
     }
@@ -399,23 +417,53 @@
     }
 
     .principle {
-      padding: 22px;
+      padding: 18px 20px;
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      gap: 14px;
+      align-items: start;
       border-left: 2px solid var(--blue);
+    }
+
+    .principle b {
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 760;
+      padding-top: 3px;
     }
 
     .principle strong { display: block; margin-bottom: 8px; }
     .principle p { color: var(--muted); line-height: 1.6; font-size: 15px; }
 
+    .validation-bridge {
+      padding: 18px 20px;
+      border: 1px dashed color-mix(in srgb, var(--orange), var(--line) 28%);
+      border-radius: var(--radius);
+      background: color-mix(in srgb, var(--orange), transparent 94%);
+    }
+
+    .validation-bridge strong {
+      display: block;
+      color: var(--orange);
+      margin-bottom: 7px;
+    }
+
+    .validation-bridge p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.58;
+    }
+
     .flywheel-grid {
       display: grid;
-      grid-template-columns: 1.05fr .75fr;
+      grid-template-columns: 1.06fr .94fr;
       gap: 32px;
       align-items: center;
     }
 
     .flywheel {
-      padding: 20px;
-      min-height: 680px;
+      padding: 18px;
+      min-height: 760px;
       display: grid;
       place-items: center;
       position: relative;
@@ -423,46 +471,62 @@
     }
 
     .flywheel svg {
-      width: min(100%, 660px);
+      width: min(100%, 620px);
       height: auto;
       overflow: visible;
     }
 
-    .wheel-ring {
+    .spiral-shadow,
+    .spiral-path,
+    .spiral-guide {
       fill: none;
-      stroke: color-mix(in srgb, var(--blue), transparent 70%);
-      stroke-width: 26;
       stroke-linecap: round;
-      stroke-dasharray: 42 22;
-      animation: spin 28s linear infinite;
-      transform-origin: 300px 300px;
     }
 
-    @keyframes spin { to { transform: rotate(360deg); } }
+    .spiral-shadow {
+      stroke: rgba(16, 24, 40, .12);
+      stroke-width: 34;
+      transform: translateY(9px);
+    }
 
-    .wheel-node circle {
+    .spiral-path {
+      stroke: url(#spiralGradient);
+      stroke-width: 18;
+      stroke-dasharray: 22 10;
+      animation: climb 14s linear infinite;
+      filter: drop-shadow(0 18px 24px rgba(0, 122, 255, .2));
+    }
+
+    .spiral-guide {
+      stroke: color-mix(in srgb, var(--ink), transparent 88%);
+      stroke-width: 1;
+      stroke-dasharray: 3 9;
+    }
+
+    @keyframes climb { to { stroke-dashoffset: -320; } }
+
+    .spiral-node circle {
       fill: var(--glass-strong);
       stroke: var(--line);
       stroke-width: 1.2;
       filter: drop-shadow(0 14px 24px rgba(16, 24, 40, .14));
     }
 
-    .wheel-node text {
+    .spiral-node text {
       fill: var(--ink);
-      font-size: 13px;
-      font-weight: 650;
+      font-size: 14px;
+      font-weight: 760;
       text-anchor: middle;
       dominant-baseline: middle;
     }
 
-    .wheel-core {
-      fill: color-mix(in srgb, var(--glass-strong), transparent 4%);
-      stroke: var(--line);
-      stroke-width: 1.3;
+    .spiral-node.validation circle {
+      fill: color-mix(in srgb, var(--orange), var(--glass-strong) 72%);
+      stroke: var(--orange);
     }
 
     .wheel-copy {
-      padding: 34px;
+      padding: 30px;
     }
 
     .statement {
@@ -475,45 +539,132 @@
 
     .statement span { color: var(--blue); }
 
-    .flow {
+    .wheel-steps {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      align-items: stretch;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0 18px;
+      margin-top: 24px;
+    }
+
+    .wheel-step {
+      display: flex;
+      align-items: baseline;
+      gap: 9px;
+      min-height: 42px;
+      padding: 10px 0;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .wheel-step b {
+      color: var(--blue);
+      font-size: 11px;
+      min-width: 20px;
+    }
+
+    .wheel-step.validation {
+      color: var(--ink);
+      font-weight: 650;
+    }
+
+    .wheel-step.validation b { color: var(--orange); }
+
+    .signal-note {
+      margin-top: 20px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.58;
+    }
+
+    .signal-note strong { color: var(--ink); }
+
+    .reuse-manifesto {
+      max-width: 920px;
+      margin: 0 0 38px;
+      font-size: clamp(38px, 6vw, 78px);
+      line-height: .98;
+      font-weight: 760;
+      letter-spacing: 0;
+    }
+
+    .reuse-manifesto span { color: var(--blue); }
+
+    #flow .section-head { grid-template-columns: .9fr 1fr; }
+    #flow h2 { font-size: clamp(34px, 4.5vw, 60px); }
+
+    .reuse-pipeline {
+      padding: 28px;
+      display: grid;
+      grid-template-columns: 1fr 54px .9fr;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .source-track {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+    }
+
+    .reuse-step {
+      min-height: 156px;
+      padding: 16px 20px;
+      border-right: 1px solid var(--line);
+    }
+
+    .reuse-step:last-child { border-right: 0; }
+    .reuse-step small { color: var(--blue); font-weight: 760; }
+    .reuse-step strong { display: block; margin: 22px 0 8px; font-size: 19px; }
+    .reuse-step p { color: var(--muted); font-size: 13px; line-height: 1.55; }
+
+    .pipeline-arrow {
+      color: var(--blue);
+      font-size: 38px;
+      text-align: center;
+    }
+
+    .outlet-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 10px;
     }
 
-    .flow-step {
-      padding: 20px 16px;
-      min-height: 160px;
-      position: relative;
-      overflow: hidden;
+    .outlet {
+      min-height: 66px;
+      padding: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.08);
+      font-size: 14px;
+      font-weight: 650;
     }
 
-    .flow-step::after {
-      content: "→";
-      position: absolute;
-      right: -2px;
-      top: 18px;
-      color: var(--muted);
+    .outlet::after {
+      content: "↗";
+      color: var(--blue);
+      font-size: 16px;
     }
-
-    .flow-step:last-child::after { display: none; }
-    .flow-step small { color: var(--blue); font-weight: 720; }
-    .flow-step strong { display: block; margin: 18px 0 8px; font-size: 18px; }
-    .flow-step p { color: var(--muted); font-size: 14px; line-height: 1.55; }
 
     .project-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
+      grid-template-columns: 1fr;
+      gap: 18px;
     }
 
     .project-card {
-      padding: 22px;
-      min-height: 280px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+      padding: 0;
+      min-height: 390px;
+      display: grid;
+      grid-template-columns: .62fr 1.38fr;
+      overflow: hidden;
       transition: transform .28s ease, border-color .28s ease;
     }
 
@@ -522,25 +673,74 @@
       border-color: color-mix(in srgb, var(--blue), var(--line) 35%);
     }
 
-    .project-card h3 {
-      font-size: 22px;
-      margin-bottom: 12px;
+    .project-overview {
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-right: 1px solid var(--line);
     }
 
-    .project-card p {
+    .project-type {
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 760;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .project-card h3 {
+      max-width: 360px;
+      font-size: clamp(26px, 3vw, 42px);
+      line-height: 1.04;
+      margin: 18px 0 14px;
+    }
+
+    .project-summary {
       color: var(--muted);
       line-height: 1.58;
       font-size: 14px;
     }
 
-    .tags, .links {
+    .case-story {
+      padding: 16px 28px;
+      display: grid;
+      align-content: center;
+    }
+
+    .case-row {
+      display: grid;
+      grid-template-columns: 116px 1fr;
+      gap: 16px;
+      padding: 11px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .case-row:first-child { border-top: 0; }
+
+    .case-label {
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 720;
+    }
+
+    .case-text {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.52;
+    }
+
+    .case-row.pitfall .case-label,
+    .case-row.pitfall .case-text { color: var(--orange); }
+
+    .links {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
       margin-top: 18px;
     }
 
-    .tag, .links a {
+    .links a {
       border: 1px solid var(--line);
       border-radius: 999px;
       padding: 7px 10px;
@@ -731,8 +931,16 @@
       .about-grid {
         grid-template-columns: 1fr;
       }
+      #flow .section-head { grid-template-columns: 1fr; }
       .hero { min-height: auto; padding-top: 80px; }
-      .flow, .project-grid { grid-template-columns: 1fr 1fr; }
+      .reuse-pipeline { grid-template-columns: 1fr; }
+      .pipeline-arrow { transform: rotate(90deg); }
+      .project-card { grid-template-columns: 1fr; }
+      .project-overview {
+        min-height: 280px;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
       .tooltip {
         left: 18px;
         right: 18px;
@@ -755,14 +963,20 @@
         padding: 12px 14px;
       }
       .pyramid-layer strong { font-size: 16px; }
-      .flywheel { min-height: 540px; padding: 8px; }
-      .flow, .project-grid, .mini-timeline { grid-template-columns: 1fr; }
-      .flow-step::after {
-        content: "↓";
-        top: auto;
-        bottom: 6px;
-        right: 18px;
+      .flywheel { min-height: 590px; padding: 8px; }
+      .wheel-copy { padding: 22px; }
+      .wheel-steps { grid-template-columns: 1fr; }
+      .reuse-pipeline { padding: 16px; }
+      .source-track { grid-template-columns: 1fr; }
+      .reuse-step {
+        min-height: auto;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
       }
+      .reuse-step:last-child { border-bottom: 0; }
+      .outlet-grid, .mini-timeline { grid-template-columns: 1fr; }
+      .project-overview, .case-story { padding: 22px; }
+      .case-row { grid-template-columns: 1fr; gap: 5px; }
       footer { flex-direction: column; }
     }
   </style>
@@ -795,7 +1009,8 @@
         <div class="reveal">
           <p class="eyebrow">AI 时代知识工作者的成长操作系统</p>
           <h1>Build Once <span class="gradient-text">Compound Forever</span></h1>
-          <p class="hero-copy">Knowledge OS 不是普通作品集，而是一套持续积累的知识体系：把项目、复盘、内容、信任和商业机会连接成一个会自我增值的系统。</p>
+          <p class="hero-definition">把每一次 AI 实践，沉淀成作品、内容、信任和长期职业资产。</p>
+          <p class="hero-note">不是把做过的事陈列出来，而是让项目、复盘、发布、反馈和下一次行动始终连接在同一个成长系统里。</p>
         </div>
         <aside class="hero-panel reveal" aria-label="Knowledge OS system map">
           <div class="system-map">
@@ -803,8 +1018,8 @@
             <div class="map-cell"><strong>Reflection</strong><span>录音、复盘、结构化洞察</span></div>
             <div class="map-cell"><strong>Publishing</strong><span>公众号、小红书、作品集同步输出</span></div>
             <div class="map-cell"><strong>Trust</strong><span>公开过程建立长期可信度</span></div>
-            <div class="map-cell"><strong>Assets</strong><span>能力、作品、内容不断沉淀</span></div>
-            <div class="map-cell"><strong>Loop</strong><span>反馈进入下一轮构建</span></div>
+            <div class="map-cell"><strong>Validation</strong><span>需求与付费成为市场信号</span></div>
+            <div class="map-cell"><strong>Next Loop</strong><span>反馈转化为更好的新问题</span></div>
           </div>
           <div class="panel-foot">
             <span>Single Source</span>
@@ -821,42 +1036,39 @@
           <p class="kicker">Chapter 01</p>
           <h2>知识资产金字塔</h2>
         </div>
-        <p class="lead">从能力到商业，每一层都不是一次性成果，而是可以复用、证明、传播和交易的知识资产。</p>
+        <p class="lead">四类资产层层产生：能力做出项目，项目留下证据，内容让证据被看见，持续输出最终形成信任。</p>
       </div>
 
       <div class="pyramid-wrap">
         <div class="pyramid glass-panel reveal" aria-label="Knowledge asset pyramid">
-          <div class="pyramid-layer">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l7 4v6c0 5-3 8-7 10-4-2-7-5-7-10V6l7-4z"/><path d="M9 12l2 2 4-5"/></svg>
-            <div><strong>商业资产</strong><span>把可信能力转化为咨询、产品、合作和现金流。</span></div>
-            <div class="tooltip">最上层不是“卖东西”，而是让长期积累的专业判断被市场准确看见。</div>
-          </div>
-          <div class="pyramid-layer">
+          <div class="pyramid-layer" tabindex="0">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 1 16 0 8 8 0 0 1-16 0z"/><path d="M8 12h8M12 8v8"/></svg>
-            <div><strong>信任资产</strong><span>公开过程、稳定交付和真实反馈，形成可验证信用。</span></div>
-            <div class="tooltip">信任来自连续记录：你如何发现问题、做出判断、修正方案，比结果截图更重要。</div>
+            <div><strong>信任资产</strong><span>持续输出被反复验证，形成可依赖的专业判断。</span></div>
+            <div class="tooltip">内容持续出现，判断经得起检验，别人才能从“看过你”走向“愿意相信你”。</div>
           </div>
-          <div class="pyramid-layer">
+          <div class="pyramid-layer" tabindex="0">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14v16H5z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
-            <div><strong>内容资产</strong><span>项目副产品被拆成文章、短帖、脚本和方法论。</span></div>
-            <div class="tooltip">内容不是额外负担，而是项目过程自然产生的解释、复盘、案例和判断。</div>
+            <div><strong>内容资产</strong><span>作品被解释和拆分，开始被更多人看见。</span></div>
+            <div class="tooltip">内容不是额外选题，而是把项目里的取舍、失败、结果和方法讲清楚。</div>
           </div>
-          <div class="pyramid-layer">
+          <div class="pyramid-layer" tabindex="0">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16v11H4z"/><path d="M8 7V5h8v2M8 13h8"/></svg>
-            <div><strong>作品资产</strong><span>每个 AI 工具都能公开展示、演示和被再次调用。</span></div>
-            <div class="tooltip">作品是能力的证据，也是未来项目的组件库、案例库和信任入口。</div>
+            <div><strong>作品资产</strong><span>真实项目成为可展示、可调用的能力证据。</span></div>
+            <div class="tooltip">能力只有进入真实项目，才会留下 GitHub、产品、过程记录和结果证据。</div>
           </div>
-          <div class="pyramid-layer">
+          <div class="pyramid-layer" tabindex="0">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M5 8h14M7 16h10"/><path d="M4 20h16"/></svg>
-            <div><strong>能力资产</strong><span>提示、研究、设计、工程、表达和判断力持续复利。</span></div>
-            <div class="tooltip">底层能力决定系统上限：不是学一个工具，而是训练自己把模糊问题变成可运行系统。</div>
+            <div><strong>能力资产</strong><span>问题定义、设计、工程、表达和判断力持续积累。</span></div>
+            <div class="tooltip">底层能力不靠课程数量证明，而靠能否把模糊问题变成一个可运行的项目。</div>
           </div>
         </div>
 
         <div class="principles reveal">
-          <div class="principle glass-panel"><strong>能力被项目锚定</strong><p>不为学习而学习，把每次能力训练落到一个可运行、可解释、可复用的 AI 项目里。</p></div>
-          <div class="principle glass-panel"><strong>项目被内容放大</strong><p>一个项目不是终点，它会变成复盘、文章、作品页、演示链接和下一次机会的入口。</p></div>
-          <div class="principle glass-panel"><strong>内容被信任承接</strong><p>持续公开过程，让别人看见你的判断、品味、方法和稳定性。</p></div>
+          <div class="principle glass-panel"><b>01</b><div><strong>能力 → 真实项目</strong><p>把每次学习落到一个真实问题上，能力才会从“知道”变成“做得到”。</p></div></div>
+          <div class="principle glass-panel"><b>02</b><div><strong>项目 → 可展示证据</strong><p>代码、产品、决策过程和最终结果，共同证明你解决过什么。</p></div></div>
+          <div class="principle glass-panel"><b>03</b><div><strong>作品 → 内容素材</strong><p>解释为什么做、如何做、踩过什么坑，一个项目自然长出多种内容。</p></div></div>
+          <div class="principle glass-panel"><b>04</b><div><strong>持续输出 → 信任</strong><p>当判断和结果被稳定看见，关注才会逐渐变成可信度。</p></div></div>
+          <div class="validation-bridge"><strong>信任 → 市场验证 → 下一轮</strong><p>咨询、合作或第一次卖出一个 49 元产品，都不是终点，而是别人愿意为专业判断付费的信号。</p></div>
         </div>
       </div>
     </section>
@@ -867,32 +1079,54 @@
           <p class="kicker">Chapter 02</p>
           <h2>成长飞轮</h2>
         </div>
-        <p class="lead">真正的增长不是线性流程，而是一轮又一轮把真实问题转化为作品、内容、反馈和更好问题的循环。</p>
+        <p class="lead">第二圈的你已经不是第一圈的你：项目更多、能力更强、内容更厚、信任更高。增长因此不是平面循环，而是螺旋上升。</p>
       </div>
 
       <div class="flywheel-grid">
         <div class="flywheel glass-panel reveal">
-          <svg viewBox="0 0 600 600" role="img" aria-label="Growth flywheel">
-            <circle class="wheel-ring" cx="300" cy="300" r="194"></circle>
-            <circle class="wheel-core" cx="300" cy="300" r="112"></circle>
-            <text x="300" y="286" text-anchor="middle" fill="currentColor" font-size="24" font-weight="760">Knowledge OS</text>
-            <text x="300" y="318" text-anchor="middle" fill="currentColor" opacity=".62" font-size="14">Project Driven Growth</text>
-            <g class="wheel-node" transform="translate(300 72)"><circle r="48"/><text><tspan x="0" y="-8">发现</tspan><tspan x="0" y="10">真实问题</tspan></text></g>
-            <g class="wheel-node" transform="translate(424 94)"><circle r="42"/><text><tspan x="0" y="-8">做 AI</tspan><tspan x="0" y="10">项目</tspan></text></g>
-            <g class="wheel-node" transform="translate(519 181)"><circle r="43"/><text><tspan x="0" y="-8">GitHub</tspan><tspan x="0" y="10">公开</tspan></text></g>
-            <g class="wheel-node" transform="translate(540 305)"><circle r="42"/><text><tspan x="0" y="-8">录音</tspan><tspan x="0" y="10">复盘</tspan></text></g>
-            <g class="wheel-node" transform="translate(492 425)"><circle r="42"/><text><tspan x="0" y="-8">AI</tspan><tspan x="0" y="10">总结</tspan></text></g>
-            <g class="wheel-node" transform="translate(384 502)"><circle r="43"/><text><tspan x="0" y="-8">拆分</tspan><tspan x="0" y="10">内容</tspan></text></g>
-            <g class="wheel-node" transform="translate(252 523)"><circle r="40"/><text><tspan x="0" y="-8">公众号</tspan><tspan x="0" y="10">发布</tspan></text></g>
-            <g class="wheel-node" transform="translate(132 470)"><circle r="42"/><text><tspan x="0" y="-8">小红书</tspan><tspan x="0" y="10">种草</tspan></text></g>
-            <g class="wheel-node" transform="translate(65 356)"><circle r="43"/><text><tspan x="0" y="-8">作品集</tspan><tspan x="0" y="10">沉淀</tspan></text></g>
-            <g class="wheel-node" transform="translate(78 226)"><circle r="42"/><text><tspan x="0" y="-8">获取</tspan><tspan x="0" y="10">反馈</tspan></text></g>
-            <g class="wheel-node" transform="translate(173 116)"><circle r="45"/><text><tspan x="0" y="-8">进入</tspan><tspan x="0" y="10">下一轮</tspan></text></g>
+          <svg viewBox="0 0 600 730" role="img" aria-label="Compounding growth spiral with eleven numbered stages">
+            <defs>
+              <linearGradient id="spiralGradient" x1="0" y1="1" x2="0" y2="0">
+                <stop offset="0" stop-color="#007aff"/><stop offset=".35" stop-color="#32d6c4"/><stop offset=".7" stop-color="#ff8a3d"/><stop offset="1" stop-color="#7c5cff"/>
+              </linearGradient>
+            </defs>
+            <ellipse class="spiral-guide" cx="300" cy="570" rx="220" ry="62"/>
+            <ellipse class="spiral-guide" cx="300" cy="440" rx="220" ry="62"/>
+            <ellipse class="spiral-guide" cx="300" cy="310" rx="220" ry="62"/>
+            <ellipse class="spiral-guide" cx="300" cy="180" rx="190" ry="54"/>
+            <path class="spiral-shadow" d="M300 682 C520 670 520 600 300 570 C80 540 80 470 300 440 C520 410 520 340 300 310 C80 280 80 210 300 180 C490 155 490 95 300 68"/>
+            <path class="spiral-path" d="M300 682 C520 670 520 600 300 570 C80 540 80 470 300 440 C520 410 520 340 300 310 C80 280 80 210 300 180 C490 155 490 95 300 68"/>
+            <text x="300" y="28" text-anchor="middle" fill="currentColor" opacity=".58" font-size="12" font-weight="700">EVERY LOOP STARTS HIGHER</text>
+            <g class="spiral-node" transform="translate(300 682)"><circle r="21"/><text y="1">01</text></g>
+            <g class="spiral-node" transform="translate(470 638)"><circle r="21"/><text y="1">02</text></g>
+            <g class="spiral-node" transform="translate(300 570)"><circle r="21"/><text y="1">03</text></g>
+            <g class="spiral-node" transform="translate(130 510)"><circle r="21"/><text y="1">04</text></g>
+            <g class="spiral-node" transform="translate(300 440)"><circle r="21"/><text y="1">05</text></g>
+            <g class="spiral-node" transform="translate(470 375)"><circle r="21"/><text y="1">06</text></g>
+            <g class="spiral-node" transform="translate(300 310)"><circle r="21"/><text y="1">07</text></g>
+            <g class="spiral-node" transform="translate(130 245)"><circle r="21"/><text y="1">08</text></g>
+            <g class="spiral-node validation" transform="translate(300 180)"><circle r="24"/><text y="1">09</text></g>
+            <g class="spiral-node" transform="translate(455 126)"><circle r="21"/><text y="1">10</text></g>
+            <g class="spiral-node" transform="translate(300 68)"><circle r="21"/><text y="1">11</text></g>
           </svg>
         </div>
         <div class="wheel-copy glass-panel reveal">
           <p class="statement">Content is <span>By-product</span> of Projects</p>
-          <p class="lead">内容不是从空白文档里硬写出来的。它来自真实项目中的取舍、失败、洞察、对比、演示和复盘。项目越真，内容越有密度；循环越稳定，增长越不用靠灵感。</p>
+          <p class="lead">内容来自真实项目中的取舍、失败、洞察和复盘。市场验证发生在循环中间，它回答的不是“赚了多少”，而是“是否有人愿意为这份判断付费”。</p>
+          <div class="wheel-steps" aria-label="Growth spiral stages">
+            <div class="wheel-step"><b>01</b><span>发现真实问题</span></div>
+            <div class="wheel-step"><b>02</b><span>动手做项目</span></div>
+            <div class="wheel-step"><b>03</b><span>公开作品</span></div>
+            <div class="wheel-step"><b>04</b><span>口述复盘</span></div>
+            <div class="wheel-step"><b>05</b><span>AI 整理</span></div>
+            <div class="wheel-step"><b>06</b><span>内容分发</span></div>
+            <div class="wheel-step"><b>07</b><span>被看见</span></div>
+            <div class="wheel-step"><b>08</b><span>建立信任</span></div>
+            <div class="wheel-step validation"><b>09</b><span>需求 / 付费验证</span></div>
+            <div class="wheel-step"><b>10</b><span>用户反馈</span></div>
+            <div class="wheel-step"><b>11</b><span>进入新问题</span></div>
+          </div>
+          <p class="signal-note"><strong>一个 49 元订单也是重要信号。</strong> 它证明专业判断开始具备真实交换价值，并为下一轮项目提供方向。</p>
         </div>
       </div>
     </section>
@@ -903,14 +1137,23 @@
           <p class="kicker">Chapter 03</p>
           <h2>单一来源，多出口</h2>
         </div>
-        <p class="lead">Create Once Publish Everywhere。把一个项目变成一组可分发、可沉淀、可复用的知识模块。</p>
+        <p class="lead">Create Once Publish Everywhere。十年的公众号、今天的 GitHub、未来的小红书和咨询产品，都从同一个真实项目生长出来。</p>
       </div>
-      <div class="flow reveal">
-        <div class="flow-step glass-panel"><small>01</small><strong>项目</strong><p>从真实需求出发，做出一个可演示的 AI 工具或工作流。</p></div>
-        <div class="flow-step glass-panel"><small>02</small><strong>录音</strong><p>边做边讲，保留决策过程、卡点和关键判断。</p></div>
-        <div class="flow-step glass-panel"><small>03</small><strong>AI 整理</strong><p>把录音变成结构化复盘、文章大纲和素材库。</p></div>
-        <div class="flow-step glass-panel"><small>04</small><strong>分发</strong><p>适配公众号、小红书、作品集、GitHub 和演示页。</p></div>
-        <div class="flow-step glass-panel"><small>05</small><strong>复利</strong><p>反馈回流到项目库，成为下一轮构建的燃料。</p></div>
+      <p class="reuse-manifesto reveal">做一次，记录一次，<span>复用很多次。</span></p>
+      <div class="reuse-pipeline glass-panel reveal">
+        <div class="source-track">
+          <div class="reuse-step"><small>01</small><strong>项目</strong><p>解决一个真实问题，留下代码、产品和结果。</p></div>
+          <div class="reuse-step"><small>02</small><strong>录音</strong><p>把过程说出来，保留判断、卡点和情绪温度。</p></div>
+          <div class="reuse-step"><small>03</small><strong>AI 整理</strong><p>转成复盘、摘要、方法、素材和可复用结构。</p></div>
+        </div>
+        <div class="pipeline-arrow" aria-hidden="true">→</div>
+        <div class="outlet-grid" aria-label="Publishing outlets">
+          <div class="outlet">公众号</div>
+          <div class="outlet">小红书</div>
+          <div class="outlet">Knowledge OS</div>
+          <div class="outlet">GitHub</div>
+          <div class="outlet">未来咨询产品</div>
+        </div>
       </div>
     </section>
 
@@ -920,20 +1163,53 @@
           <p class="kicker">Chapter 04</p>
           <h2>项目库</h2>
         </div>
-        <p class="lead">每个 AI 工具都是一张作品卡：记录项目、思考、反思，也连接 GitHub、演示和文章。</p>
+        <p class="lead">这里保存的不是漂亮截图，而是一份份可验证的项目档案：问题、路径、踩坑、结果和下一次会做得更好的地方。</p>
       </div>
       <div class="project-grid reveal">
         <article class="project-card glass-panel">
-          <div><h3>AI Research Console</h3><p>把碎片信息整理成可追踪的研究面板，训练问题定义、资料筛选和结论表达。</p><div class="tags"><span class="tag">项目</span><span class="tag">思考</span><span class="tag">反思</span></div></div>
-          <div class="links"><a href="#">GitHub</a><a href="#">演示</a><a href="#">文章</a></div>
+          <div class="project-overview">
+            <div><span class="project-type">Learning System</span><h3>小程序开发学习文档</h3><p class="project-summary">把一次真实的小程序开发过程，整理成可公开学习、持续更新的章节式文档。</p></div>
+            <div class="links"><a href="https://github.com/yehloo-ai/college-of-design" target="_blank" rel="noopener">GitHub</a><a href="https://yehloo-ai.github.io/college-of-design/slide/" target="_blank" rel="noopener">产品</a><a href="#thinking">相关内容</a></div>
+          </div>
+          <div class="case-story">
+            <div class="case-row"><span class="case-label">问题</span><span class="case-text">开发工具、平台配置、真机验证和发布知识彼此割裂，新手很难建立完整路径。</span></div>
+            <div class="case-row"><span class="case-label">为什么做</span><span class="case-text">把自己走过的路变成下一次可直接复用的学习系统。</span></div>
+            <div class="case-row"><span class="case-label">我怎么做</span><span class="case-text">按真实开发阶段组织章节，保留工具截图、关键判断和可访问演示。</span></div>
+            <div class="case-row pitfall"><span class="case-label">踩过什么坑</span><span class="case-text">模拟器可运行不等于真机可用，更不等于已经审核或正式发布。</span></div>
+            <div class="case-row"><span class="case-label">最终结果</span><span class="case-text">一套与代码仓库共存、可通过 GitHub Pages 阅读的学习文档。</span></div>
+            <div class="case-row"><span class="case-label">我的复盘</span><span class="case-text">平台能力和发布状态必须基于真实配置与设备证据表达。</span></div>
+            <div class="case-row"><span class="case-label">产生的内容</span><span class="case-text">开发教程、工具清单、发布检查表和失败记录。</span></div>
+          </div>
         </article>
         <article class="project-card glass-panel">
-          <div><h3>Prompt Operating Kit</h3><p>将高频提示词变成可复用模块，让个人工作流逐渐从经验变成系统。</p><div class="tags"><span class="tag">提示工程</span><span class="tag">工作流</span></div></div>
-          <div class="links"><a href="#">GitHub</a><a href="#">演示</a><a href="#">文章</a></div>
+          <div class="project-overview">
+            <div><span class="project-type">Information Product</span><h3>AI 资讯站</h3><p class="project-summary">把分散的 AI 新闻、模型、融资与工具信息，变成可追踪和交叉浏览的每日情报站。</p></div>
+            <div class="links"><a href="https://github.com/yehloo-ai/ai-news-station" target="_blank" rel="noopener">GitHub</a><a href="https://yehloo-ai.github.io/ai-news-station/" target="_blank" rel="noopener">产品</a><a href="#thinking">相关内容</a></div>
+          </div>
+          <div class="case-story">
+            <div class="case-row"><span class="case-label">问题</span><span class="case-text">AI 信息更新太快、来源太散，看过之后难以比较，也无法形成长期线索。</span></div>
+            <div class="case-row"><span class="case-label">为什么做</span><span class="case-text">建立一个每天能回访、长期能累积的个人信息入口。</span></div>
+            <div class="case-row"><span class="case-label">我怎么做</span><span class="case-text">把每日摘要、模型与融资时间线、工具目录和交叉筛选放进同一页面。</span></div>
+            <div class="case-row pitfall"><span class="case-label">踩过什么坑</span><span class="case-text">跨域代理和外部数据源会失效；页面能打开，不代表数据链路可靠。</span></div>
+            <div class="case-row"><span class="case-label">最终结果</span><span class="case-text">一个持续更新、可公开访问的 AI news hub。</span></div>
+            <div class="case-row"><span class="case-label">我的复盘</span><span class="case-text">资讯产品的核心不是数量，而是来源稳定、时间清楚和筛选有用。</span></div>
+            <div class="case-row"><span class="case-label">产生的内容</span><span class="case-text">每日摘要、模型观察、工具对比和构建日志。</span></div>
+          </div>
         </article>
         <article class="project-card glass-panel">
-          <div><h3>Portfolio Generator</h3><p>把项目事实、复盘和链接自动整理成作品页，减少展示成本，提高可信度。</p><div class="tags"><span class="tag">作品集</span><span class="tag">发布</span></div></div>
-          <div class="links"><a href="#">GitHub</a><a href="#">演示</a><a href="#">文章</a></div>
+          <div class="project-overview">
+            <div><span class="project-type">AI Workflow</span><h3>灵感探针</h3><p class="project-summary">把模糊的产品创意转成可检索、可核验的专利可行性工作流。</p></div>
+            <div class="links"><a href="https://github.com/yehloo-ai/lingan-tanzhen" target="_blank" rel="noopener">GitHub</a><a href="https://yehloo-ai.github.io/lingan-tanzhen/" target="_blank" rel="noopener">产品</a><a href="#thinking">相关内容</a></div>
+          </div>
+          <div class="case-story">
+            <div class="case-row"><span class="case-label">问题</span><span class="case-text">一个产品想法是否已有相似专利，普通人很难从模糊描述进入有效检索。</span></div>
+            <div class="case-row"><span class="case-label">为什么做</span><span class="case-text">让早期创意先经过证据筛查，再决定是否继续投入。</span></div>
+            <div class="case-row"><span class="case-label">我怎么做</span><span class="case-text">把想法拆成关键特征、检索词、证据结果和结论边界，并保留本地 FastAPI 流程。</span></div>
+            <div class="case-row pitfall"><span class="case-label">踩过什么坑</span><span class="case-text">命中数量不是结论；同义表达、误报和法律判断边界都必须单独处理。</span></div>
+            <div class="case-row"><span class="case-label">最终结果</span><span class="case-text">一个可托管演示、也可在本地运行的专利可行性检索工具。</span></div>
+            <div class="case-row"><span class="case-label">我的复盘</span><span class="case-text">AI 适合缩小证据范围，但不能替代专业法律结论。</span></div>
+            <div class="case-row"><span class="case-label">产生的内容</span><span class="case-text">检索策略、关键词拆解、误报案例和产品验证方法。</span></div>
+          </div>
         </article>
       </div>
     </section>

@@ -65,14 +65,14 @@
   function featuredMarkup(ref) {
     const item = itemFromRef(ref);
     if (!item) return '';
-    const title = item.coverTitle ? item.coverTitle.replace(/\n/g, '、') : item.displayTitle;
+    const title = escapeHtml(item.coverTitle || item.displayTitle).replace(/\n/g, '<br>');
     return `
       <button class="featured-card" type="button" data-open-type="${item.type}" data-open-id="${item.id}">
         <img class="featured-image" src="${escapeHtml(item.cover)}" alt="" loading="eager">
         <span class="featured-scrim"></span>
         <span class="featured-content">
           <span class="labels"><span class="type-label">${typeLabel(item)}</span><span class="pick-label">精选推荐</span></span>
-          <span class="featured-title">${escapeHtml(title)}</span>
+          <span class="featured-title">${title}</span>
           <span class="featured-desc">${escapeHtml(item.desc)}</span>
           <span class="featured-meta"><span>${escapeHtml(secondaryMeta(item))}</span><span>${escapeHtml(metric(item))}</span></span>
         </span>

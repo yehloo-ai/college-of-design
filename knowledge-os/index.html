@@ -219,9 +219,20 @@
       line-height: 1.42;
     }
 
-    .hero-note {
-      margin-top: 14px;
-      max-width: 620px;
+    .hero-principle {
+      margin-top: 24px;
+      max-width: 660px;
+      padding: 18px 0 0 20px;
+      border-left: 2px solid var(--blue);
+    }
+
+    .hero-principle strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 17px;
+    }
+
+    .hero-principle p {
       color: var(--muted);
       font-size: 15px;
       line-height: 1.65;
@@ -261,7 +272,7 @@
 
     .system-map {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 10px;
       min-height: 290px;
     }
@@ -274,9 +285,10 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      min-height: 92px;
+      min-height: 126px;
     }
 
+    .map-cell small { color: var(--blue); font-size: 11px; font-weight: 760; }
     .map-cell strong { font-size: 14px; }
     .map-cell span { color: var(--muted); font-size: 12px; line-height: 1.35; }
 
@@ -318,6 +330,142 @@
       color: var(--muted);
       font-size: clamp(16px, 1.7vw, 20px);
       line-height: 1.65;
+    }
+
+    .now-section { padding-top: 42px; }
+
+    .now-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 28px;
+    }
+
+    .now-head h2 { font-size: clamp(36px, 5vw, 64px); }
+
+    .now-cycle {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 680;
+      white-space: nowrap;
+    }
+
+    .now-cycle::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 6px color-mix(in srgb, var(--green), transparent 84%);
+    }
+
+    .now-board { overflow: hidden; }
+
+    .now-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .now-toolbar strong { color: var(--blue); }
+
+    .now-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .now-field {
+      min-height: 154px;
+      padding: 22px 24px;
+      border-top: 1px solid var(--line);
+    }
+
+    .now-field.wide {
+      grid-column: 1 / -1;
+      min-height: 142px;
+      border-top: 0;
+    }
+
+    .now-field.left { border-right: 1px solid var(--line); }
+
+    .now-label {
+      display: block;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 720;
+    }
+
+    .now-value {
+      min-height: 42px;
+      color: var(--ink);
+      font-size: clamp(18px, 2vw, 24px);
+      font-weight: 640;
+      line-height: 1.45;
+      outline: none;
+      transition: color .2s ease, background .2s ease;
+    }
+
+    .now-value[contenteditable="true"] {
+      cursor: text;
+      border-radius: 6px;
+    }
+
+    .now-value[contenteditable="true"]:hover,
+    .now-value[contenteditable="true"]:focus {
+      background: color-mix(in srgb, var(--blue), transparent 94%);
+    }
+
+    .now-field.pause {
+      background: color-mix(in srgb, var(--orange), transparent 96%);
+    }
+
+    .now-field.pause .now-label { color: var(--orange); }
+
+    .stage-switch {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 6px;
+    }
+
+    .stage-button {
+      min-height: 42px;
+      padding: 8px 6px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      color: var(--muted);
+      background: rgba(255,255,255,.06);
+      font: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: color .2s ease, background .2s ease, border-color .2s ease;
+    }
+
+    .stage-button:hover,
+    .stage-button:focus-visible {
+      color: var(--ink);
+      border-color: color-mix(in srgb, var(--blue), var(--line) 45%);
+      outline: none;
+    }
+
+    .stage-button.is-active {
+      color: #fff;
+      background: var(--blue);
+      border-color: var(--blue);
+      box-shadow: 0 8px 22px color-mix(in srgb, var(--blue), transparent 70%);
     }
 
     .pyramid-wrap {
@@ -539,6 +687,43 @@
 
     .statement span { color: var(--blue); }
 
+    .execution-label {
+      margin-bottom: 12px;
+      color: var(--blue);
+      font-size: 11px;
+      font-weight: 760;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .state-machine {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 6px;
+      margin: 22px 0;
+    }
+
+    .machine-state {
+      min-height: 74px;
+      padding: 12px 9px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: rgba(255,255,255,.06);
+    }
+
+    .machine-state small { color: var(--blue); font-size: 10px; font-weight: 760; }
+    .machine-state strong { font-size: 13px; }
+
+    .wheel-mantra {
+      margin-top: 20px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 680;
+    }
+
     .wheel-steps {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -732,6 +917,11 @@
 
     .case-row.pitfall .case-label,
     .case-row.pitfall .case-text { color: var(--orange); }
+
+    .case-row.capability .case-label { color: var(--blue); }
+    .case-row.asset .case-label { color: var(--green); }
+    .case-row.capability .case-text,
+    .case-row.asset .case-text { color: var(--ink); }
 
     .links {
       display: flex;
@@ -955,7 +1145,15 @@
     @media (max-width: 640px) {
       .section { padding: 70px 0; }
       .hero-panel { min-height: 380px; }
-      .system-map { grid-template-columns: 1fr; }
+      .system-map { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .map-cell { min-height: 118px; }
+      .now-section { padding-top: 30px; }
+      .now-head { align-items: flex-start; flex-direction: column; }
+      .now-grid { grid-template-columns: 1fr; }
+      .now-field.wide { grid-column: auto; }
+      .now-field.left { border-right: 0; }
+      .stage-switch,
+      .state-machine { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .pyramid { min-height: 520px; padding: 16px; }
       .pyramid-layer {
         width: 100%;
@@ -993,10 +1191,11 @@
         <span>Knowledge OS</span>
       </a>
       <div class="nav-links" aria-label="Page navigation">
+        <a href="#now">NOW</a>
         <a href="#pyramid">资产</a>
         <a href="#flywheel">飞轮</a>
         <a href="#flow">流程</a>
-        <a href="#projects">项目库</a>
+        <a href="#projects">能力账本</a>
         <a href="#thinking">思考</a>
         <a href="#about">关于我</a>
       </div>
@@ -1010,23 +1209,67 @@
           <p class="eyebrow">AI 时代知识工作者的成长操作系统</p>
           <h1>Build Once <span class="gradient-text">Compound Forever</span></h1>
           <p class="hero-definition">把每一次 AI 实践，沉淀成作品、内容、信任和长期职业资产。</p>
-          <p class="hero-note">不是把做过的事陈列出来，而是让项目、复盘、发布、反馈和下一次行动始终连接在同一个成长系统里。</p>
+          <div class="hero-principle">
+            <strong>不要为了输出而输出。</strong>
+            <p>从真实问题出发，做出东西，留下证据，记录思考，让每一次投入进入下一轮。</p>
+          </div>
         </div>
         <aside class="hero-panel reveal" aria-label="Knowledge OS system map">
           <div class="system-map">
-            <div class="map-cell"><strong>Projects</strong><span>真实问题驱动的 AI 工具</span></div>
-            <div class="map-cell"><strong>Reflection</strong><span>录音、复盘、结构化洞察</span></div>
-            <div class="map-cell"><strong>Publishing</strong><span>公众号、小红书、作品集同步输出</span></div>
-            <div class="map-cell"><strong>Trust</strong><span>公开过程建立长期可信度</span></div>
-            <div class="map-cell"><strong>Validation</strong><span>需求与付费成为市场信号</span></div>
-            <div class="map-cell"><strong>Next Loop</strong><span>反馈转化为更好的新问题</span></div>
+            <div class="map-cell"><small>01</small><strong>Observe</strong><span>发现值得解决的真实问题</span></div>
+            <div class="map-cell"><small>02</small><strong>Build</strong><span>做出一个可运行的东西</span></div>
+            <div class="map-cell"><small>03</small><strong>Reflect</strong><span>说清选择、卡点和结果</span></div>
+            <div class="map-cell"><small>04</small><strong>Publish</strong><span>公开证据，让反馈回来</span></div>
           </div>
           <div class="panel-foot">
-            <span>Single Source</span>
-            <span>Multiple Outputs</span>
-            <span>Compounding System</span>
+            <span>Personal OS</span>
+            <span>Public by Default</span>
+            <span>Long-term Loop</span>
           </div>
         </aside>
+      </div>
+    </section>
+
+    <section class="section now-section" id="now">
+      <div class="now-head reveal">
+        <div>
+          <p class="kicker">NOW · 当前循环</p>
+          <h2>我现在在做什么</h2>
+        </div>
+        <div class="now-cycle">Current cycle</div>
+      </div>
+      <div class="now-board glass-panel reveal">
+        <div class="now-toolbar">
+          <span>Personal Operating System</span>
+          <strong id="currentStageLabel">BUILD</strong>
+        </div>
+        <div class="now-grid">
+          <div class="now-field wide">
+            <span class="now-label">当前问题</span>
+            <p class="now-value" contenteditable="true" role="textbox" aria-label="当前问题" data-now-key="problem">怎样让 Knowledge OS 真正推动行动，而不是只展示成果？</p>
+          </div>
+          <div class="now-field left">
+            <span class="now-label">正在构建</span>
+            <p class="now-value" contenteditable="true" role="textbox" aria-label="正在构建" data-now-key="building">一个先服务自己、同时允许别人看见成长过程的 Personal Operating System。</p>
+          </div>
+          <div class="now-field">
+            <span class="now-label">当前阶段</span>
+            <div class="stage-switch" aria-label="当前阶段">
+              <button class="stage-button" type="button" data-stage="Observe" aria-pressed="false">Observe</button>
+              <button class="stage-button is-active" type="button" data-stage="Build" aria-pressed="true">Build</button>
+              <button class="stage-button" type="button" data-stage="Reflect" aria-pressed="false">Reflect</button>
+              <button class="stage-button" type="button" data-stage="Publish" aria-pressed="false">Publish</button>
+            </div>
+          </div>
+          <div class="now-field left">
+            <span class="now-label">本周下一步</span>
+            <p class="now-value" contenteditable="true" role="textbox" aria-label="本周下一步" data-now-key="next">用这套系统推动一个真实项目进入下一个状态。</p>
+          </div>
+          <div class="now-field pause">
+            <span class="now-label">暂时不做</span>
+            <p class="now-value" contenteditable="true" role="textbox" aria-label="暂时不做" data-now-key="not-doing">不开新项目，也不为每个想法立刻寻找变现路径。</p>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -1068,7 +1311,7 @@
           <div class="principle glass-panel"><b>02</b><div><strong>项目 → 可展示证据</strong><p>代码、产品、决策过程和最终结果，共同证明你解决过什么。</p></div></div>
           <div class="principle glass-panel"><b>03</b><div><strong>作品 → 内容素材</strong><p>解释为什么做、如何做、踩过什么坑，一个项目自然长出多种内容。</p></div></div>
           <div class="principle glass-panel"><b>04</b><div><strong>持续输出 → 信任</strong><p>当判断和结果被稳定看见，关注才会逐渐变成可信度。</p></div></div>
-          <div class="validation-bridge"><strong>信任 → 市场验证 → 下一轮</strong><p>咨询、合作或第一次卖出一个 49 元产品，都不是终点，而是别人愿意为专业判断付费的信号。</p></div>
+          <div class="validation-bridge"><strong>商业不是第五层资产。</strong><p>它是前四层资产接受市场检验后的结果。偶尔问市场一句：“有人愿意为这个付钱吗？”有，就是信号；没有，就回来继续做。</p></div>
         </div>
       </div>
     </section>
@@ -1079,7 +1322,7 @@
           <p class="kicker">Chapter 02</p>
           <h2>成长飞轮</h2>
         </div>
-        <p class="lead">第二圈的你已经不是第一圈的你：项目更多、能力更强、内容更厚、信任更高。增长因此不是平面循环，而是螺旋上升。</p>
+        <p class="lead">完整飞轮保留 11 个节点，用来理解系统；每天真正执行时，只需要判断自己处在 Observe、Build、Reflect、Publish 哪个状态。</p>
       </div>
 
       <div class="flywheel-grid">
@@ -1111,8 +1354,16 @@
           </svg>
         </div>
         <div class="wheel-copy glass-panel reveal">
-          <p class="statement">Content is <span>By-product</span> of Projects</p>
-          <p class="lead">内容来自真实项目中的取舍、失败、洞察和复盘。市场验证发生在循环中间，它回答的不是“赚了多少”，而是“是否有人愿意为这份判断付费”。</p>
+          <p class="execution-label">Daily state machine</p>
+          <p class="statement">只记住四个状态。</p>
+          <div class="state-machine" aria-label="Daily execution states">
+            <div class="machine-state"><small>01</small><strong>Observe</strong></div>
+            <div class="machine-state"><small>02</small><strong>Build</strong></div>
+            <div class="machine-state"><small>03</small><strong>Reflect</strong></div>
+            <div class="machine-state"><small>04</small><strong>Publish</strong></div>
+          </div>
+          <p class="lead">以后做任何事情，只问自己：我是在发现问题、动手做、复盘，还是发布？四个状态负责今天，完整飞轮负责长期。</p>
+          <p class="wheel-mantra">Content is By-product of Projects.</p>
           <div class="wheel-steps" aria-label="Growth spiral stages">
             <div class="wheel-step"><b>01</b><span>发现真实问题</span></div>
             <div class="wheel-step"><b>02</b><span>动手做项目</span></div>
@@ -1161,9 +1412,9 @@
       <div class="section-head reveal">
         <div>
           <p class="kicker">Chapter 04</p>
-          <h2>项目库</h2>
+          <h2>项目能力账本</h2>
         </div>
-        <p class="lead">这里保存的不是漂亮截图，而是一份份可验证的项目档案：问题、路径、踩坑、结果和下一次会做得更好的地方。</p>
+        <p class="lead">每个项目既是可验证的案例，也是能力增长记录：做完了什么、学会了什么，以及留下了哪些可以再次调用的资产。</p>
       </div>
       <div class="project-grid reveal">
         <article class="project-card glass-panel">
@@ -1177,6 +1428,8 @@
             <div class="case-row"><span class="case-label">我怎么做</span><span class="case-text">按真实开发阶段组织章节，保留工具截图、关键判断和可访问演示。</span></div>
             <div class="case-row pitfall"><span class="case-label">踩过什么坑</span><span class="case-text">模拟器可运行不等于真机可用，更不等于已经审核或正式发布。</span></div>
             <div class="case-row"><span class="case-label">最终结果</span><span class="case-text">一套与代码仓库共存、可通过 GitHub Pages 阅读的学习文档。</span></div>
+            <div class="case-row capability"><span class="case-label">新增能力</span><span class="case-text">微信小程序开发 / 发布 / 审核流程 / AI 辅助开发。</span></div>
+            <div class="case-row asset"><span class="case-label">可复用资产</span><span class="case-text">GitHub Repo ×1、学习文档 ×1、小红书 ×3、公众号 ×1、发布 Checklist ×1。</span></div>
             <div class="case-row"><span class="case-label">我的复盘</span><span class="case-text">平台能力和发布状态必须基于真实配置与设备证据表达。</span></div>
             <div class="case-row"><span class="case-label">产生的内容</span><span class="case-text">开发教程、工具清单、发布检查表和失败记录。</span></div>
           </div>
@@ -1192,6 +1445,8 @@
             <div class="case-row"><span class="case-label">我怎么做</span><span class="case-text">把每日摘要、模型与融资时间线、工具目录和交叉筛选放进同一页面。</span></div>
             <div class="case-row pitfall"><span class="case-label">踩过什么坑</span><span class="case-text">跨域代理和外部数据源会失效；页面能打开，不代表数据链路可靠。</span></div>
             <div class="case-row"><span class="case-label">最终结果</span><span class="case-text">一个持续更新、可公开访问的 AI news hub。</span></div>
+            <div class="case-row capability"><span class="case-label">新增能力</span><span class="case-text">信息源评估 / 数据建模 / 跨域排错 / 静态站发布 / 内容产品 IA。</span></div>
+            <div class="case-row asset"><span class="case-label">可复用资产</span><span class="case-text">GitHub Repo ×1、公开站点 ×1、每日摘要模板 ×1、模型与融资时间线 ×2、数据源检查表 ×1。</span></div>
             <div class="case-row"><span class="case-label">我的复盘</span><span class="case-text">资讯产品的核心不是数量，而是来源稳定、时间清楚和筛选有用。</span></div>
             <div class="case-row"><span class="case-label">产生的内容</span><span class="case-text">每日摘要、模型观察、工具对比和构建日志。</span></div>
           </div>
@@ -1207,6 +1462,8 @@
             <div class="case-row"><span class="case-label">我怎么做</span><span class="case-text">把想法拆成关键特征、检索词、证据结果和结论边界，并保留本地 FastAPI 流程。</span></div>
             <div class="case-row pitfall"><span class="case-label">踩过什么坑</span><span class="case-text">命中数量不是结论；同义表达、误报和法律判断边界都必须单独处理。</span></div>
             <div class="case-row"><span class="case-label">最终结果</span><span class="case-text">一个可托管演示、也可在本地运行的专利可行性检索工具。</span></div>
+            <div class="case-row capability"><span class="case-label">新增能力</span><span class="case-text">问题拆解 / 专利检索词设计 / 证据边界判断 / FastAPI 原型 / 托管演示。</span></div>
+            <div class="case-row asset"><span class="case-label">可复用资产</span><span class="case-text">GitHub Repo ×1、产品演示 ×1、检索模板 ×1、关键词方法 ×1、误报案例库 ×1。</span></div>
             <div class="case-row"><span class="case-label">我的复盘</span><span class="case-text">AI 适合缩小证据范围，但不能替代专业法律结论。</span></div>
             <div class="case-row"><span class="case-label">产生的内容</span><span class="case-text">检索策略、关键词拆解、误报案例和产品验证方法。</span></div>
           </div>
@@ -1274,6 +1531,42 @@
     }, { threshold: 0.14 });
 
     reveals.forEach((el) => observer.observe(el));
+
+    const nowStoragePrefix = 'knowledge-os.now.';
+    const readNow = (key) => {
+      try { return window.localStorage.getItem(nowStoragePrefix + key); }
+      catch (_) { return null; }
+    };
+    const writeNow = (key, value) => {
+      try { window.localStorage.setItem(nowStoragePrefix + key, value); }
+      catch (_) { /* The public view still works when storage is unavailable. */ }
+    };
+
+    document.querySelectorAll('[data-now-key]').forEach((field) => {
+      const key = field.dataset.nowKey;
+      const savedValue = readNow(key);
+      if (savedValue !== null) field.textContent = savedValue;
+      field.addEventListener('input', () => writeNow(key, field.innerText.trim()));
+    });
+
+    const stageButtons = [...document.querySelectorAll('[data-stage]')];
+    const currentStageLabel = document.getElementById('currentStageLabel');
+    const setStage = (stage, persist = true) => {
+      stageButtons.forEach((button) => {
+        const isActive = button.dataset.stage === stage;
+        button.classList.toggle('is-active', isActive);
+        button.setAttribute('aria-pressed', String(isActive));
+      });
+      if (currentStageLabel) currentStageLabel.textContent = stage.toUpperCase();
+      if (persist) writeNow('stage', stage);
+    };
+
+    stageButtons.forEach((button) => {
+      button.addEventListener('click', () => setStage(button.dataset.stage));
+    });
+
+    const savedStage = readNow('stage');
+    setStage(stageButtons.some((button) => button.dataset.stage === savedStage) ? savedStage : 'Build', false);
 
     const stripe = document.querySelector('.stripe');
     window.addEventListener('scroll', () => {

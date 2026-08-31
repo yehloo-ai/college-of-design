@@ -6,7 +6,7 @@
 
 ## 当前内容
 
-- 10 篇设计文章，覆盖 AI 专项、UX 内容与设计思维
+- 17 篇设计文章，覆盖 AI 专项、UX 内容与设计思维
 - 2 期音频，包含摘要、章节目录与完整文字稿
 - 1 个“小程序 Vibe Coding 上线核心路径”实践章节，共 17 个学习节点
 - 响应式首页、分类列表、文章阅读与音频播放
@@ -19,7 +19,7 @@
 node scripts/sync-miniprogram-content.mjs "/absolute/path/to/designer-hub-miniprogram"
 ```
 
-脚本会读取小程序的 `utils/data.js`、`utils/bodies.js` 与 `utils/transcripts.js`，生成 `content/site-data.js`，并同步公开展示所需素材。
+脚本会读取小程序的 `utils/data.js`、基础与文章分包正文、`utils/transcripts.js`，生成 `content/site-data.js`，并同步封面及文章正文图片。
 
 ## 相关页面
 

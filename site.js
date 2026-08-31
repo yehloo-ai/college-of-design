@@ -84,6 +84,8 @@
     document.getElementById('hero-title').textContent = data.product.name;
     document.getElementById('heroSubtitle').textContent = data.product.subtitle;
     document.getElementById('heroImage').src = data.product.heroImage;
+    document.getElementById('articleCount').textContent = Object.keys(data.articles).length;
+    document.getElementById('audioCount').textContent = Object.keys(data.audio).length;
     document.getElementById('featuredGrid').innerHTML = data.featured.map(featuredMarkup).join('');
     document.getElementById('aiGrid').innerHTML = data.sections.ai.map(cardMarkup).join('');
     document.getElementById('uxGrid').innerHTML = data.sections.ux.map(cardMarkup).join('');

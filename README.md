@@ -1,31 +1,31 @@
-# UX设计成长助手
+# UX Design Growth Assistant
 
-**在线访问：** [yehloo-ai.github.io/college-of-design](https://yehloo-ai.github.io/college-of-design/)
+**Live site:** [yehloo-ai.github.io/college-of-design](https://yehloo-ai.github.io/college-of-design/)
 
-这是“UX设计成长助手”微信小程序的网页同步版本，面向桌面端与移动端展示真实内容，并保持文章、音频与实践章节的一致性。
+This is the web-synchronized edition of the **UX Design Growth Assistant** WeChat Mini Program. It presents the actual content on desktop and mobile while preserving consistency across articles, audio, and hands-on learning modules.
 
-## 当前内容
+## Current Content
 
-- 17 篇设计文章，覆盖 AI 专项、UX 内容与设计思维
-- 2 期音频，包含摘要、章节目录与完整文字稿
-- 1 个“小程序 Vibe Coding 上线核心路径”实践章节，共 17 个学习节点
-- 响应式首页、分类列表、文章阅读与音频播放
+- 17 design articles covering AI specialization, UX content, and design thinking.
+- Two audio episodes, each with a summary, chapter list, and full transcript.
+- One hands-on module, **"The Core Path to Launching a Mini Program with Vibe Coding,"** with 17 learning milestones.
+- A responsive homepage, category lists, article reading, and audio playback.
 
-## 内容同步
+## Content Synchronization
 
-网页数据由小程序内容源生成：
+Website data is generated from the Mini Program content source:
 
 ```bash
 node scripts/sync-miniprogram-content.mjs "/absolute/path/to/designer-hub-miniprogram"
 ```
 
-脚本会读取小程序的 `utils/data.js`、基础与文章分包正文、`utils/transcripts.js`，生成 `content/site-data.js`，并同步封面及文章正文图片。
+The script reads the Mini Program's `utils/data.js`, the base and article subpackage bodies, and `utils/transcripts.js`; it then generates `content/site-data.js` and synchronizes cover images and in-article images.
 
-## 相关页面
+## Related Pages
 
-- [Vibe Coding 实践章节](https://yehloo-ai.github.io/college-of-design/slide/)
+- [Vibe Coding Hands-on Module](https://yehloo-ai.github.io/college-of-design/slide/)
 - [Knowledge OS](https://yehloo-ai.github.io/college-of-design/knowledge-os/)
 
-## 技术
+## Technology
 
 `Vanilla HTML / CSS / JS` · `GitHub Pages`

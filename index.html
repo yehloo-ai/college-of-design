@@ -4,11 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="description" content="UX设计成长助手：面向 AI 时代的设计实践、组织方法与专业成长内容。">
-  <meta name="theme-color" content="#ffffff">
+  <meta name="theme-color" content="#f7f5f0">
   <title>UX设计成长助手</title>
   <link rel="stylesheet" href="site.css">
+  <link rel="stylesheet" href="editorial.css?v=20260910">
 </head>
-<body>
+<body class="hub-page">
+  <a class="skip-link" href="#main">跳至内容</a>
   <header class="topbar">
     <div class="topbar-inner">
       <button class="brand" type="button" data-scroll="top" aria-label="返回首页">
@@ -33,24 +35,23 @@
       <div class="hero-kicker" id="heroKicker">设计学习助手</div>
       <h1 id="hero-title">UX设计成长助手</h1>
       <p class="hero-sub" id="heroSubtitle">持续积累可复用的设计判断、方法与实践</p>
+      <p class="hero-intro">关注真实的工作场景与思考方法；<br>持续积累可复用的设计判断、方法与实践。</p>
       <div class="hero-stats" aria-label="内容概览">
         <span class="hero-stat"><strong id="articleCount">17</strong>篇文章</span>
         <span class="hero-stat"><strong id="audioCount">2</strong>期音频</span>
-        <span class="hero-stat"><strong>17</strong>个实践节点</span>
+
       </div>
     </div>
   </section>
 
-  <main>
-    <section class="section" aria-labelledby="featured-title">
-      <div class="section-heading">
-        <div class="section-title-wrap">
-          <span class="section-accent" aria-hidden="true"></span>
-          <h2 id="featured-title">精选推荐</h2>
-          <span class="section-note">从最新思考与核心方法开始</span>
-        </div>
-      </div>
-      <div class="featured-grid" id="featuredGrid"></div>
+  <main id="main">
+    <section class="section editorial-feature" aria-labelledby="featured-title">
+      <h2 class="sr-only" id="featured-title">精选推荐</h2>
+      <div id="featuredGrid"></div>
+      <aside class="audio-picks" aria-labelledby="audio-picks-title">
+        <div class="section-title-wrap"><span class="section-accent" aria-hidden="true"></span><h2 id="audio-picks-title">音频推荐</h2><span class="section-note">用对话，打开新的思考角度</span></div>
+        <div id="audioPicks"></div>
+      </aside>
     </section>
 
     <section class="section" id="section-ai" aria-labelledby="ai-title">
@@ -105,8 +106,9 @@
   </nav>
 
   <div class="panel-backdrop" id="panelBackdrop"></div>
-  <aside class="panel" id="contentPanel" aria-hidden="true" aria-labelledby="panelTitle">
+  <aside class="panel" id="contentPanel" role="dialog" aria-modal="true" inert aria-hidden="true" aria-labelledby="panelTitle">
     <div class="panel-top">
+      <button class="panel-back" id="panelBack" type="button" hidden>返回列表</button>
       <div class="panel-title" id="panelTitle">内容详情</div>
       <button class="icon-button" id="closePanel" type="button" aria-label="关闭内容详情">×</button>
     </div>
@@ -114,6 +116,6 @@
   </aside>
 
   <script src="content/site-data.js"></script>
-  <script src="site.js"></script>
+  <script src="site.js?v=20260910"></script>
 </body>
 </html>

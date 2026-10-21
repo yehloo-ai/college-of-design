@@ -1,6 +1,6 @@
 window.DESIGNER_HUB_DATA = {
   "product": {
-    "name": "UX设计成长助手",
+    "name": "AX设计成长助手",
     "label": "设计知识平台",
     "subtitle": "UX 内容 · AI 专项 · 设计思维",
     "heroImage": "assets/home-editorial-header-clean.jpg"
@@ -282,11 +282,11 @@ window.DESIGNER_HUB_DATA = {
       "totalSeconds": 862,
       "cover": "assets/cover-au3.jpg",
       "transcriptId": "aiDesignWorkflow",
-      "src": "audio/ai-stages-clean-v1.mp3",
+      "src": "audio/ai-stages-environment-clean-v2.mp3",
       "views": "1,860",
       "viewsAreEstimated": true,
       "bundle": {
-        "key": "ai-stages-clean-mobile-v1",
+        "key": "ai-stages-environment-clean-v2",
         "bytes": 5170437
       },
       "transcript": {

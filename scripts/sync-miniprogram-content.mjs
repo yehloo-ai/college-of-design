@@ -35,7 +35,7 @@ const transcripts = { ...require(sourceFiles.transcripts), aiDesignWorkflow: req
 
 const relativeAsset = (value) => String(value || '').replace(/^\//, '');
 const audioMeta = {
-  au3: { src: 'audio/ai-stages-clean-v1.mp3' },
+  au3: { src: 'audio/ai-stages-environment-clean-v2.mp3' },
   au1: {
     views: '3,260',
     src: 'audio/AI时代下的角色重构.mp3'
@@ -89,7 +89,7 @@ const aiRefs = [
 
 const payload = {
   product: {
-    name: 'UX设计成长助手',
+    name: 'AX设计成长助手',
     label: '设计知识平台',
     subtitle: 'UX 内容 · AI 专项 · 设计思维',
     heroImage: 'assets/home-editorial-header-clean.jpg'

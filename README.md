@@ -1,8 +1,8 @@
-# UX Design Growth Assistant
+# AX Design Growth Assistant
 
 **Live site:** [designer-learning.netlify.app](https://designer-learning.netlify.app/)
 
-This is the web-synchronized edition of the **UX Design Growth Assistant** WeChat Mini Program. It presents the actual content on desktop and mobile while preserving consistency across articles, audio, and hands-on learning modules.
+This is the web-synchronized edition of the **AX Design Growth Assistant** WeChat Mini Program. It presents the actual content on desktop and mobile while preserving consistency across articles, audio, and hands-on learning modules.
 
 ## Current Content
 

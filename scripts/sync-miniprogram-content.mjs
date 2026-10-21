@@ -16,30 +16,26 @@ if (!process.argv[2] && !process.env.DESIGNER_HUB_MINIPROGRAM) {
 const sourceFiles = {
   data: path.join(sourceRoot, 'utils/data.js'),
   bodies: path.join(sourceRoot, 'utils/bodies.js'),
-  packageBodies: path.join(sourceRoot, 'package-articles/utils/bodies.js'),
   transcripts: path.join(sourceRoot, 'utils/transcripts.js'),
-  assets: path.join(sourceRoot, 'assets'),
-  packageAssets: path.join(sourceRoot, 'package-articles/assets')
+  assets: path.join(sourceRoot, 'assets')
 };
 
-['data', 'bodies', 'transcripts', 'assets'].forEach((key) => {
-  const filePath = sourceFiles[key];
+Object.values(sourceFiles).forEach((filePath) => {
   if (!fs.existsSync(filePath)) {
     throw new Error(`Missing mini-program source: ${filePath}`);
   }
 });
 
 const data = require(sourceFiles.data);
-const bodies = {
-  ...require(sourceFiles.bodies).bodies,
-  ...(fs.existsSync(sourceFiles.packageBodies) ? require(sourceFiles.packageBodies).bodies : {})
-};
-const transcripts = require(sourceFiles.transcripts);
+const bodies = require(sourceFiles.bodies).bodies;
+const packageBodies = require(path.join(sourceRoot, 'package-articles/utils/bodies.js')).bodies;
+const articleLayout = require(path.join(sourceRoot, 'utils/article-layout.js'));
+const webAssets = (value) => String(value || '').replace(/([\"'])\/(assets|package-articles|package-audio|package-zaojing)\//g, '$1$2/');
+const transcripts = { ...require(sourceFiles.transcripts), aiDesignWorkflow: require(path.join(sourceRoot, 'package-audio/utils/ai-design-workflow-transcript.js')), zaojing: require(path.join(sourceRoot, 'package-zaojing/utils/zaojing-transcript.js')) };
 
 const relativeAsset = (value) => String(value || '').replace(/^\//, '');
-const normalizeBodyAssets = (value) => String(value || '')
-  .replace(/(["'])\/package-articles\/assets\//g, '$1assets/');
 const audioMeta = {
+  au3: { src: 'audio/ai-stages-clean-v1.mp3' },
   au1: {
     views: '3,260',
     src: 'audio/AI时代下的角色重构.mp3'
@@ -54,7 +50,7 @@ const articles = Object.fromEntries(
   Object.entries(data.articles).map(([id, article]) => [id, {
     ...article,
     cover: relativeAsset(article.cover),
-    body: normalizeBodyAssets(bodies[id])
+    body: webAssets(article.sourcePackage ? (packageBodies[id] || '') : articleLayout.formatArticleBody(id, bodies[id] || ''))
   }])
 );
 
@@ -62,9 +58,10 @@ const audio = Object.fromEntries(
   Object.entries(data.audioList).map(([id, item]) => [id, {
     ...item,
     cover: relativeAsset(item.cover),
+    diagram: item.diagram ? { ...item.diagram, src: relativeAsset(item.diagram.src), thumbnail: relativeAsset(item.diagram.thumbnail) } : null,
     src: audioMeta[id]?.src || item.src,
-    views: audioMeta[id]?.views || '0',
-    transcript: transcripts[item.transcriptId] || null
+    views: item.views || audioMeta[id]?.views || '0',
+    transcript: transcripts[item.transcriptId] ? { ...transcripts[item.transcriptId], sourceMemoHtml: webAssets(transcripts[item.transcriptId].sourceMemoHtml) } : null
   }])
 );
 
@@ -77,6 +74,19 @@ const practice = Object.fromEntries(
   }])
 );
 
+const featuredRefs = [
+  { type: 'audio', id: 'au4' },
+  { type: 'audio', id: 'au3' },
+  { type: 'article', id: 'a17' }
+];
+const aiRefs = [
+  { type: 'audio', id: 'au1' },
+  { type: 'audio', id: 'au2' },
+  { type: 'article', id: 'a9' },
+  { type: 'practice', id: 'vibeCoding', title: '小程序 设计Coding 核心路径' },
+  ...featuredRefs
+];
+
 const payload = {
   product: {
     name: 'UX设计成长助手',
@@ -88,39 +98,26 @@ const payload = {
   audio,
   practice,
   sections: {
-    ai: [
-      ...data.homeSections.aigc.ids.map((id) => ({ type: 'article', id })),
-      { type: 'practice', id: 'vibeCoding', title: '小程序 设计Coding 核心路径' },
-      { type: 'audio', id: 'au1', title: 'AI 时代的组织与角色重构' },
-      { type: 'audio', id: 'au2' }
-    ],
+    ai: aiRefs,
     ux: data.homeSections.ux.ids.map((id) => ({ type: 'article', id })),
     learn: data.homeSections.learn.ids.map((id) => ({ type: 'article', id }))
   },
   allSections: {
-    ai: [
-      ...data.sections.aigc.items.map((id) => ({ type: 'article', id })),
-      { type: 'practice', id: 'vibeCoding' },
-      { type: 'audio', id: 'au1' },
-      { type: 'audio', id: 'au2' }
-    ],
+    ai: aiRefs,
     ux: data.sections.ux.items.map((id) => ({ type: 'article', id })),
     learn: data.sections.learn.items.map((id) => ({ type: 'article', id }))
   },
-  featured: [
-    { type: 'audio', id: 'au1' },
-    { type: 'audio', id: 'au2' },
-    { type: 'article', id: 'a17' }
-  ]
+  featured: featuredRefs
 };
 
 const contentDir = path.join(siteRoot, 'content');
 const assetTarget = path.join(siteRoot, 'assets');
 fs.mkdirSync(contentDir, { recursive: true });
-fs.rmSync(assetTarget, { recursive: true, force: true });
-fs.cpSync(sourceFiles.assets, assetTarget, { recursive: true });
-if (fs.existsSync(sourceFiles.packageAssets)) {
-  fs.cpSync(sourceFiles.packageAssets, assetTarget, { recursive: true });
+const ignoredFiles = new Set((JSON.parse(fs.readFileSync(path.join(sourceRoot, 'project.config.json'), 'utf8')).packOptions?.ignore || []).filter(rule => rule.type === 'file').map(rule => rule.value));
+fs.cpSync(sourceFiles.assets, assetTarget, { recursive: true, filter: (src) => !ignoredFiles.has(path.relative(sourceRoot, src).split(path.sep).join('/')) });
+for (const pack of ['package-articles', 'package-audio', 'package-zaojing']) {
+  const from = path.join(sourceRoot, pack, 'assets');
+  if (fs.existsSync(from)) fs.cpSync(from, path.join(siteRoot, pack, 'assets'), { recursive: true });
 }
 
 const serialized = JSON.stringify(payload, null, 2)

@@ -87,3 +87,5 @@ footer{border-top:1px solid var(--line);background:#fff}.footer-inner{width:min(
   .footer-inner{width:calc(100% - 32px);flex-direction:column;gap:7px;padding:22px 0}
   .mobile-nav{position:fixed;left:0;right:0;bottom:0;z-index:70;height:calc(60px + env(safe-area-inset-bottom,0px));padding-bottom:env(safe-area-inset-bottom,0px);display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);background:rgba(255,255,255,.97);backdrop-filter:blur(14px)}.mobile-nav button{border:0;background:none;color:var(--quiet);font-size:11px;font-weight:700;cursor:pointer}.mobile-nav button.active{color:var(--orange)}
 }
+
+.audio-diagram { display: block; width: 100%; height: auto; border-radius: 12px; }

@@ -193,8 +193,10 @@
         <div class="detail-wrap">
           <div class="detail-meta">${escapeHtml(item.tag)} · ${escapeHtml(item.duration)} · ${escapeHtml(item.views)} 收听</div>
           <audio class="audio-player" aria-label="${escapeHtml(item.title)}" controls preload="metadata" src="${escapeHtml(item.src)}"></audio><p class="audio-error" role="status" hidden>音频暂时无法加载，请检查网络后重试。</p>
+          ${item.diagram ? `<section class="audio-block"><h2>${escapeHtml(item.diagram.title || '具体流程')}</h2><a href="${escapeHtml(item.diagram.src)}" target="_blank" rel="noopener"><img class="audio-diagram" src="${escapeHtml(item.diagram.thumbnail || item.diagram.src)}" alt="${escapeHtml(item.diagram.title || '具体流程')}"></a><p>点击查看完整流程图</p></section>` : ''}
           <section class="audio-block"><h2>内容摘要</h2><ul class="summary-list">${summaries}</ul></section>
           <section class="audio-block"><h2>章节目录</h2><div class="chapter-list">${chapters}</div></section>
+          ${transcript.sourceMemoHtml ? `<section class="audio-block"><h2>完整纪要</h2><p>${escapeHtml(transcript.memoSource || '')}</p><div class="article-body">${transcript.sourceMemoHtml}</div></section>` : ''}
           <details class="audio-block transcript"><summary>完整文字稿</summary><div class="transcript-body">${paragraphs}</div></details>
         </div>
       </article>`);

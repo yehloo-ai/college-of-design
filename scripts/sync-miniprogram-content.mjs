@@ -35,14 +35,15 @@ const transcripts = { ...require(sourceFiles.transcripts), aiDesignWorkflow: req
 
 const relativeAsset = (value) => String(value || '').replace(/^\//, '');
 const audioMeta = {
-  au3: { src: 'audio/ai-stages-environment-clean-v2.mp3' },
+  au3: { src: 'audio/ai-stages-clean-v3.mp3' },
+  au4: { src: 'audio/zaojing-clean-v3.mp3' },
   au1: {
     views: '3,260',
-    src: 'audio/AI时代下的角色重构.mp3'
+    src: 'audio/ai-role-clean-v3.mp3'
   },
   au2: {
     views: '2,480',
-    src: 'audio/C端工作流协同与业务增益体系构建.mp3'
+    src: 'audio/c-workflow-clean-v3.mp3'
   }
 };
 
